@@ -1,0 +1,142 @@
+{
+  "name": "manbok",
+  "frame": [
+    98,
+    64
+  ],
+  "cell_px": 2,
+  "coords": "x,y = 보드 프레임(98×64) 좌상단 기준 1px. 프레임 아래로 나갈 수 있다(돗자리). raise = 몸을 올리는 양(1px, 앉는 면 − 엉덩이 선 4px)",
+  "order": "UsageSky enum 순서(usage_screen.h) — 펌웨어 테이블은 sky 키로 찾으므로 순서는 참고용",
+  "seats": [
+    {
+      "sky": "brown",
+      "label": "벤치+정류장",
+      "x": 16,
+      "y": 28,
+      "w": 76,
+      "h": 36,
+      "raise": 4,
+      "img": "pp_manbok_seat_brown_img.c"
+    },
+    {
+      "sky": "navy",
+      "label": "벤치+정류장",
+      "x": 16,
+      "y": 28,
+      "w": 76,
+      "h": 36,
+      "raise": 4,
+      "img": "pp_manbok_seat_navy_img.c"
+    },
+    {
+      "sky": "day",
+      "label": "벤치+정류장",
+      "x": 16,
+      "y": 28,
+      "w": 76,
+      "h": 36,
+      "raise": 4,
+      "img": "pp_manbok_seat_day_img.c"
+    },
+    {
+      "sky": "sunset",
+      "label": "벤치+정류장",
+      "x": 16,
+      "y": 28,
+      "w": 76,
+      "h": 36,
+      "raise": 4,
+      "img": "pp_manbok_seat_sunset_img.c"
+    },
+    {
+      "sky": "room",
+      "label": "방석",
+      "x": 18,
+      "y": 60,
+      "w": 54,
+      "h": 4,
+      "raise": 0,
+      "img": "pp_manbok_seat_room_img.c"
+    },
+    {
+      "sky": "camp",
+      "label": "통나무",
+      "x": 14,
+      "y": 58,
+      "w": 62,
+      "h": 6,
+      "raise": 2,
+      "img": "pp_manbok_seat_camp_img.c"
+    },
+    {
+      "sky": "space",
+      "label": "소행성 바위",
+      "x": 16,
+      "y": 56,
+      "w": 58,
+      "h": 8,
+      "raise": 4,
+      "img": "pp_manbok_seat_space_img.c"
+    },
+    {
+      "sky": "cafe",
+      "label": "스툴",
+      "x": 26,
+      "y": 52,
+      "w": 38,
+      "h": 12,
+      "raise": 8,
+      "img": "pp_manbok_seat_cafe_img.c"
+    },
+    {
+      "sky": "alley",
+      "label": "나무 상자",
+      "x": 18,
+      "y": 56,
+      "w": 54,
+      "h": 8,
+      "raise": 4,
+      "img": "pp_manbok_seat_alley_img.c"
+    },
+    {
+      "sky": "sea",
+      "label": "바위+불가사리",
+      "x": 16,
+      "y": 56,
+      "w": 68,
+      "h": 8,
+      "raise": 4,
+      "img": "pp_manbok_seat_sea_img.c"
+    },
+    {
+      "sky": "sakura",
+      "label": "돗자리+도시락",
+      "x": 2,
+      "y": 60,
+      "w": 86,
+      "h": 12,
+      "raise": 0,
+      "img": "pp_manbok_seat_sakura_img.c"
+    },
+    {
+      "sky": "library",
+      "label": "책 더미",
+      "x": 18,
+      "y": 52,
+      "w": 52,
+      "h": 12,
+      "raise": 8,
+      "img": "pp_manbok_seat_library_img.c"
+    },
+    {
+      "sky": "site",
+      "label": "벽돌 팔레트+고깔",
+      "x": 16,
+      "y": 58,
+      "w": 76,
+      "h": 6,
+      "raise": 2,
+      "img": "pp_manbok_seat_site_img.c"
+    }
+  ]
+}

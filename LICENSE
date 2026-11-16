@@ -2,7 +2,8 @@ MIT License
 
 Copyright (c) 2026 wineny
 
-This license covers the source code in this repository (host/ and tools/) only.
+This license covers the source code in host/ and tools/. The firmware/ folder
+has its own LICENSE (MIT) and NOTICE.
 Character art, pixel sprites, and photographs (art/ and the images in case/)
 are (c) the author, all rights reserved, and are NOT covered by this license.
 

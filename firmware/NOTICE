@@ -1,0 +1,22 @@
+Desk Buddies firmware - art and sound notice
+
+The source code in this folder is MIT licensed (see LICENSE).
+
+The following are (c) the author, all rights reserved, and are NOT covered by
+the MIT license:
+
+- Character art of Rona, Rozzi and Manbok (packs/bboketer/, packs/manbok/)
+- Scene and background art (packs/bboketer/assets/, packs/bboketer/scenes/)
+- Cat recordings (main/sounds/notify_poke.pcm, notify_guest.pcm,
+  tap_rona2.pcm, tap_rozzi2.pcm)
+
+You may build this firmware with the included art and sounds and flash it to
+your own boards for personal, non-commercial use. Please do not redistribute
+the art or recordings separately, sell them, or use the characters in other
+projects without asking.
+
+The ticker font packs/gift/font_galmuri11_12_1.bin is a bitmap conversion of
+Galmuri11 by Lee Minseo, SIL Open Font License 1.1 (packs/gift/OFL-Galmuri.txt).
+
+The baby sounds (main/sounds/tap_manbok1.pcm, tap_manbok2.pcm) are cut from
+public-domain recordings on Wikimedia Commons (links in README.md).

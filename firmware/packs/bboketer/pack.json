@@ -1,0 +1,24 @@
+{
+  "name": "bboketer",
+  "sets": ["bboketer"],
+  "default": "bboketer",
+  "scenes": true,
+  "map": {
+    "idle": "idle",
+    "thinking": "thinking",
+    "working": "working",
+    "juggling": "juggling",
+    "permission": "permission",
+    "error": "error",
+    "done": "done",
+    "sleeping": "sleeping"
+  },
+  "touch": {
+    "tap": "tap",
+    "double": "double"
+  },
+  "scale": {
+    "idle": 2.0,
+    "state": 2.0
+  }
+}

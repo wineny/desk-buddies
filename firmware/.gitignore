@@ -1,0 +1,24 @@
+tmp/
+components/*
+# 와이파이 연결 부품만 고쳐서 레포에 둔다(집 와이파이 우선·핫스팟에서 복귀, 2026-11-07)
+!components/78__esp-wifi-connect/
+managed_components/
+build/
+dist/
+.vscode/
+.devcontainer/
+sdkconfig.old
+.env
+releases/
+main/assets/lang_config.h
+main/mmap_generate_emoji.h
+.DS_Store
+.cache
+*.pyc
+*.bin
+!packs/gift/*.bin
+mmap_generate_*.h
+.clangd
+.omc/
+sdkconfig.bak-*
+__pycache__/

@@ -1,0 +1,117 @@
+{
+  "name": "manbok",
+  "base": "out/mb_wk_img",
+  "spec": "overlays/mb_wk.json",
+  "wear": [],
+  "grid": [
+    41,
+    54
+  ],
+  "cell_px": 1,
+  "states": {
+    "idle": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "think": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "juggle": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "busy": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "sleep": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "happy": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "error": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "dizzy": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "heart": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "wave": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "banzai": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "thumbs": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "lie": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "ride": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "ride_l": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "pet": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "sneeze": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "pout": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "highfive": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    }
+  },
+  "board": "board/pp_<state>_0_img.c (I8 라인아트, 1배, USER1 = 아래 가운데 맞춤) — tools/apply_lineart.py",
+  "extra_bases": {
+    "wave": "out/mbp_wave_img",
+    "banzai": "out/mbp_banzai_img",
+    "thumbs": "out/mbp_thumbs_img",
+    "lie": "out/mbp_lie_img",
+    "ride": "out/mbp_ride_img",
+    "ride_l": "out/mbp_ride_img"
+  }
+}

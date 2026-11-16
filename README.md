@@ -4,7 +4,7 @@ Two small desk companions that keep a couple connected, and keep their AI coding
 
 I built two orange, cat-eared pixel screens, one for my desk and one for my husband's. Each shows my real cats, Rona and Rozzi, and our baby-to-be, Manbok (due February 2027). They show when the other person wrote in the baby diary, they pass messages and high-fives between each other, and they show what our AI coding assistant is doing right now (I use Claude Code, my husband uses Codex). This repo is the part of the project you can reproduce: how it works, the host-side scripts, the case dimensions, and the pixel art.
 
-> Status: the full board firmware is not included yet. It is based on [xiaozhi-esp32](https://github.com/78/xiaozhi-esp32) (MIT) and contains third-party character art that I cannot republish. Everything on the computer side (hooks, state, usage, weather) is here and tested.
+The board firmware is in [firmware/](firmware/README.md). It is based on [xiaozhi-esp32](https://github.com/78/xiaozhi-esp32) (MIT) and contains only my own characters.
 
 ## Features
 
@@ -16,7 +16,7 @@ I built two orange, cat-eared pixel screens, one for my desk and one for my husb
 - **Board-to-board messages, replies and high-fives** over home Wi-Fi, with a cat meow on arrival. No server involved.
 - **Visit:** a character walks over to the other board.
 - **AI assistant status:** working, waiting for approval, error, or sleeping, plus the usage limit in the screen corners.
-- Weather-based outfits and particles, touch interactions (poke, pet, summon an action).
+- Weather particles (rain, snow, leaves), a wardrobe for scenes and outfits, and touch reactions with each character's own sound.
 
 ## How it works
 
@@ -104,7 +104,7 @@ The board runs a small HTTP server. Main endpoint is `POST /usage` with a JSON b
 | `poke` / `poke_rx` | `0`-`5`: send a poke through the real path / show a received poke (testing) |
 | `sound` | `{"vol":0-100,"quiet_from":0-23,"quiet_to":0-23}`; `vol` 0 mutes |
 | `sound_test` | Play `poke`, `guest`, `rona`, `rozzi` or `manbok` sound now |
-| `act`, `touch`, `visit`, `meteor`, `wifiguide`, `wificfg` | QA/debug injection |
+| `act` (`ride` only), `touch`, `wifiguide`, `wificfg` | QA/debug injection |
 
 Other endpoints used by the tools: `GET /screen` returns a dump of the current screen (used by `tools/screen.py`). Invalid values return HTTP 400.
 
@@ -113,13 +113,14 @@ State priority and fallbacks: `permission` stays until answered (15 min cap), `e
 ## Repo layout
 
 ```
+firmware/ ESP-IDF board firmware (MIT code; character art and cat recordings see firmware/NOTICE)
 host/    hook, state, usage and weather scripts + tests (MIT)
 tools/   screen dump (screen.py), sound importer, asset pack generator
 art/     pixel-character cutouts: rona/, rozzi/, manbok/ (face, pose, turn sheets)
 case/    case dimensions, photos and CAD render
 ```
 
-`tools/import_notify_sounds.py` documents how the notification sounds were cut from the source recordings. The audio files themselves are not included.
+`tools/import_notify_sounds.py` documents how the notification sounds were cut from the source recordings. The cut clips the firmware plays are in `firmware/main/sounds/`.
 
 ## Sound credits
 
@@ -131,10 +132,11 @@ case/    case dimensions, photos and CAD render
 ## Credits
 
 - Firmware base: [xiaozhi-esp32](https://github.com/78/xiaozhi-esp32) by 78, MIT license.
-- Pixel font: [Galmuri](https://github.com/quiple/galmuri) (Galmuri11/14), SIL Open Font License 1.1. Used to pre-render Korean text on the board; the font files are not included.
+- Pixel font: [Galmuri](https://github.com/quiple/galmuri) (Galmuri11/14), SIL Open Font License 1.1. Used to pre-render Korean text, and `firmware/packs/gift/font_galmuri11_12_1.bin` is a 12px bitmap of Galmuri11 for the scrolling ticker.
 - Weather data: [Open-Meteo](https://open-meteo.com/).
 
 ## License
 
-- **Code** (`host/`, `tools/`): MIT, see [LICENSE](LICENSE).
+- **Code** (`host/`, `tools/`): MIT, see [LICENSE](LICENSE). Firmware code (`firmware/`): MIT, see [firmware/LICENSE](firmware/LICENSE).
+- **Firmware art and cat recordings** (`firmware/packs/bboketer/`, `firmware/packs/manbok/`, cat sounds in `firmware/main/sounds/`): see [firmware/NOTICE](firmware/NOTICE). You may build and flash them to your own boards for personal, non-commercial use. The ticker font in `firmware/packs/gift/` is OFL (see `firmware/packs/gift/OFL-Galmuri.txt`).
 - **Character art and photos** (`art/`, `case/*.jpg`, `case/*.png`): (c) the author, all rights reserved. They are not covered by the MIT license.

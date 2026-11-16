@@ -1,0 +1,518 @@
+[
+{
+"week_from": 20,
+"week_to": 30,
+"slot": "morning",
+"text": "잘 때는 옆으로 누우면 숨이 덜 차요"
+},
+{
+"week_from": 20,
+"week_to": 30,
+"slot": "morning",
+"text": "28주까지는 4주마다 검진이에요"
+},
+{
+"week_from": 20,
+"week_to": 30,
+"slot": "morning",
+"text": "허리가 아프면 앉을 때 베개로 받쳐요"
+},
+{
+"week_from": 20,
+"week_to": 30,
+"slot": "morning",
+"text": "굽 높은 신발은 피하는 게 좋아요"
+},
+{
+"week_from": 20,
+"week_to": 30,
+"slot": "morning",
+"text": "오래 서 있었다면 다리를 올려 쉬어요"
+},
+{
+"week_from": 20,
+"week_to": 30,
+"slot": "morning",
+"text": "몸에 꼭 끼지 않는 편한 옷을 입어요"
+},
+{
+"week_from": 20,
+"week_to": 30,
+"slot": "morning",
+"text": "배가 많이 늘어지면 복대도 도움돼요"
+},
+{
+"week_from": 20,
+"week_to": 30,
+"slot": "noon",
+"text": "너무 짜지 않게 먹으면 붓기가 줄어요"
+},
+{
+"week_from": 20,
+"week_to": 30,
+"slot": "noon",
+"text": "과일·채소와 물로 변비를 막아요"
+},
+{
+"week_from": 20,
+"week_to": 30,
+"slot": "noon",
+"text": "속이 쓰리면 적게 먹고 식후엔 눕지 않기"
+},
+{
+"week_from": 20,
+"week_to": 30,
+"slot": "noon",
+"text": "걷기와 수영은 좋은 운동이에요"
+},
+{
+"week_from": 20,
+"week_to": 30,
+"slot": "noon",
+"text": "운동하다 불편하면 바로 멈춰요"
+},
+{
+"week_from": 20,
+"week_to": 30,
+"slot": "noon",
+"text": "카페인은 하루 200mg 이하로"
+},
+{
+"week_from": 20,
+"week_to": 30,
+"slot": "noon",
+"text": "한 자세로 계속 앉아 있지 않기"
+},
+{
+"week_from": 20,
+"week_to": 30,
+"slot": "evening",
+"text": "철분제는 자기 전에 먹으면 속이 편해요"
+},
+{
+"week_from": 20,
+"week_to": 30,
+"slot": "evening",
+"text": "배냇저고리는 순면으로 3~4개"
+},
+{
+"week_from": 20,
+"week_to": 30,
+"slot": "evening",
+"text": "속싸개는 2개쯤 준비해요"
+},
+{
+"week_from": 20,
+"week_to": 30,
+"slot": "evening",
+"text": "가제 손수건은 부드러운 걸로 여러 장"
+},
+{
+"week_from": 20,
+"week_to": 30,
+"slot": "evening",
+"text": "기저귀는 30장쯤 넉넉하게"
+},
+{
+"week_from": 20,
+"week_to": 30,
+"slot": "evening",
+"text": "아기 체온계를 하나 준비해요"
+},
+{
+"week_from": 20,
+"week_to": 30,
+"slot": "evening",
+"text": "아기띠는 안전인증을 확인해요"
+},
+{
+"week_from": 31,
+"week_to": 34,
+"slot": "morning",
+"text": "소변이 잦은 건 임신 후기에 흔해요"
+},
+{
+"week_from": 31,
+"week_to": 34,
+"slot": "morning",
+"text": "물건을 들 땐 구부리지 말고 쪼그려 앉기"
+},
+{
+"week_from": 31,
+"week_to": 34,
+"slot": "morning",
+"text": "배가 커지면 욕실 미끄럼을 조심해요"
+},
+{
+"week_from": 31,
+"week_to": 34,
+"slot": "morning",
+"text": "36주까지는 2주마다 검진이에요"
+},
+{
+"week_from": 31,
+"week_to": 34,
+"slot": "morning",
+"text": "발이 많이 부을 수 있어요"
+},
+{
+"week_from": 31,
+"week_to": 34,
+"slot": "morning",
+"text": "손발·얼굴이 갑자기 부으면 혈압 확인"
+},
+{
+"week_from": 31,
+"week_to": 34,
+"slot": "morning",
+"text": "분비물이 가렵거나 냄새 나면 진료 상담"
+},
+{
+"week_from": 31,
+"week_to": 34,
+"slot": "noon",
+"text": "오래 이동할 땐 1시간마다 다리 움직이기"
+},
+{
+"week_from": 31,
+"week_to": 34,
+"slot": "noon",
+"text": "무릎벨트는 배 아래로 매요"
+},
+{
+"week_from": 31,
+"week_to": 34,
+"slot": "noon",
+"text": "어깨벨트는 가슴 사이로 매요"
+},
+{
+"week_from": 31,
+"week_to": 34,
+"slot": "noon",
+"text": "물을 충분히 마셔요"
+},
+{
+"week_from": 31,
+"week_to": 34,
+"slot": "noon",
+"text": "감기엔 쉬고 수분을 챙겨요"
+},
+{
+"week_from": 31,
+"week_to": 34,
+"slot": "noon",
+"text": "약이 필요하면 산부인과에서 처방받아요"
+},
+{
+"week_from": 31,
+"week_to": 34,
+"slot": "noon",
+"text": "독감 백신은 주수와 상관없이 맞을 수 있어요"
+},
+{
+"week_from": 31,
+"week_to": 34,
+"slot": "evening",
+"text": "아기 매트리스는 단단한 걸로"
+},
+{
+"week_from": 31,
+"week_to": 34,
+"slot": "evening",
+"text": "아기 침대 살 간격은 50~95mm"
+},
+{
+"week_from": 31,
+"week_to": 34,
+"slot": "evening",
+"text": "매트리스 옆 틈은 20mm 이하로"
+},
+{
+"week_from": 31,
+"week_to": 34,
+"slot": "evening",
+"text": "카시트는 뒷좌석에 달아요"
+},
+{
+"week_from": 31,
+"week_to": 34,
+"slot": "evening",
+"text": "조수석에는 카시트를 달지 않아요"
+},
+{
+"week_from": 31,
+"week_to": 34,
+"slot": "evening",
+"text": "12개월 전엔 뒤를 보게 장착해요"
+},
+{
+"week_from": 31,
+"week_to": 34,
+"slot": "evening",
+"text": "카시트는 흔들리지 않게 단단히 고정"
+},
+{
+"week_from": 31,
+"week_to": 34,
+"slot": "evening",
+"text": "중고 용품도 안전인증을 확인해요"
+},
+{
+"week_from": 35,
+"week_to": 37,
+"slot": "morning",
+"text": "34주부터는 분만 병원 가까이 있기"
+},
+{
+"week_from": 35,
+"week_to": 37,
+"slot": "morning",
+"text": "36주 뒤로는 매주 검진이에요"
+},
+{
+"week_from": 35,
+"week_to": 37,
+"slot": "morning",
+"text": "불규칙하고 약한 조임은 가진통일 수 있어요"
+},
+{
+"week_from": 35,
+"week_to": 37,
+"slot": "morning",
+"text": "규칙적으로 세지는 배뭉침은 바로 병원"
+},
+{
+"week_from": 35,
+"week_to": 37,
+"slot": "morning",
+"text": "물처럼 흐르는 분비물은 바로 병원"
+},
+{
+"week_from": 35,
+"week_to": 37,
+"slot": "morning",
+"text": "출혈이 있으면 바로 병원에 가요"
+},
+{
+"week_from": 35,
+"week_to": 37,
+"slot": "morning",
+"text": "평소와 다른 통증도 병원에 물어봐요"
+},
+{
+"week_from": 35,
+"week_to": 37,
+"slot": "noon",
+"text": "심한 두통이나 시력 변화는 바로 병원"
+},
+{
+"week_from": 35,
+"week_to": 37,
+"slot": "noon",
+"text": "오른쪽 윗배 통증은 바로 병원"
+},
+{
+"week_from": 35,
+"week_to": 37,
+"slot": "noon",
+"text": "소변이 갑자기 줄면 병원에 물어봐요"
+},
+{
+"week_from": 35,
+"week_to": 37,
+"slot": "noon",
+"text": "체중이 갑자기 늘면 검진 때 말해요"
+},
+{
+"week_from": 35,
+"week_to": 37,
+"slot": "noon",
+"text": "혈압·소변 검사는 검진마다 받아요"
+},
+{
+"week_from": 35,
+"week_to": 37,
+"slot": "noon",
+"text": "무거운 걸 들면 허리가 아플 수 있어요"
+},
+{
+"week_from": 35,
+"week_to": 37,
+"slot": "noon",
+"text": "많이 걸은 날은 다리를 쉬어요"
+},
+{
+"week_from": 35,
+"week_to": 37,
+"slot": "evening",
+"text": "입원 가방은 미리 챙겨 둬요"
+},
+{
+"week_from": 35,
+"week_to": 37,
+"slot": "evening",
+"text": "입원 준비물은 병원 안내를 먼저 확인"
+},
+{
+"week_from": 35,
+"week_to": 37,
+"slot": "evening",
+"text": "아빠·엄마 신분증을 함께 챙겨요"
+},
+{
+"week_from": 35,
+"week_to": 37,
+"slot": "evening",
+"text": "수유브라와 산모패드를 챙겨요"
+},
+{
+"week_from": 35,
+"week_to": 37,
+"slot": "evening",
+"text": "보온용 내의와 목 긴 양말"
+},
+{
+"week_from": 35,
+"week_to": 37,
+"slot": "evening",
+"text": "얇은 카디건과 담요를 챙겨요"
+},
+{
+"week_from": 35,
+"week_to": 37,
+"slot": "evening",
+"text": "아기 옷은 배냇저고리·속싸개·겉싸개"
+},
+{
+"week_from": 35,
+"week_to": 37,
+"slot": "evening",
+"text": "보온병이 있으면 편해요"
+},
+{
+"week_from": 38,
+"week_to": 40,
+"slot": "morning",
+"text": "이 시기엔 매주 검진이에요"
+},
+{
+"week_from": 38,
+"week_to": 40,
+"slot": "morning",
+"text": "진통은 10분 간격에서 점점 짧아져요"
+},
+{
+"week_from": 38,
+"week_to": 40,
+"slot": "morning",
+"text": "진통이 전형적이지 않을 수도 있어요"
+},
+{
+"week_from": 38,
+"week_to": 40,
+"slot": "morning",
+"text": "양수가 새는 것 같으면 바로 병원"
+},
+{
+"week_from": 38,
+"week_to": 40,
+"slot": "morning",
+"text": "이상한 느낌이면 바로 병원에 가요"
+},
+{
+"week_from": 38,
+"week_to": 40,
+"slot": "morning",
+"text": "첫 출산은 보통 9~18시간 걸려요"
+},
+{
+"week_from": 38,
+"week_to": 40,
+"slot": "noon",
+"text": "건강하면 진통 전까지 일해도 돼요"
+},
+{
+"week_from": 38,
+"week_to": 40,
+"slot": "noon",
+"text": "무리하지 않는 걷기는 좋아요"
+},
+{
+"week_from": 38,
+"week_to": 40,
+"slot": "noon",
+"text": "배가 커져 균형 잡기 어려워요, 천천히"
+},
+{
+"week_from": 38,
+"week_to": 40,
+"slot": "noon",
+"text": "한 자세로 오래 앉지 않기"
+},
+{
+"week_from": 38,
+"week_to": 40,
+"slot": "noon",
+"text": "물과 채소를 챙겨 먹어요"
+},
+{
+"week_from": 38,
+"week_to": 40,
+"slot": "noon",
+"text": "속이 쓰리면 조금씩 나눠 먹어요"
+},
+{
+"week_from": 38,
+"week_to": 40,
+"slot": "evening",
+"text": "수건은 찜질과 세면에 두루 써요"
+},
+{
+"week_from": 38,
+"week_to": 40,
+"slot": "evening",
+"text": "복대는 출산 뒤 허리·배를 받쳐 줘요"
+},
+{
+"week_from": 38,
+"week_to": 40,
+"slot": "evening",
+"text": "물티슈도 다용도로 챙겨요"
+},
+{
+"week_from": 38,
+"week_to": 40,
+"slot": "evening",
+"text": "호흡법을 함께 연습해 둬요"
+},
+{
+"week_from": 38,
+"week_to": 40,
+"slot": "evening",
+"text": "진통 줄이는 방법을 병원에 미리 물어봐요"
+},
+{
+"week_from": 38,
+"week_to": 40,
+"slot": "evening",
+"text": "산후 진찰은 보통 1~3주 안에 받아요"
+},
+{
+"week_from": 38,
+"week_to": 40,
+"slot": "evening",
+"text": "수유 의사는 병원·조리원에 미리 알려요"
+},
+{
+"week_from": 38,
+"week_to": 40,
+"slot": "evening",
+"text": "모유는 하루 8~12회가 기준이에요"
+},
+{
+"week_from": 38,
+"week_to": 40,
+"slot": "evening",
+"text": "출생 뒤 1시간 안에 젖 물리기가 이상적"
+}
+]
