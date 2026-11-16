@@ -6,7 +6,7 @@ Follow the parts in order. Each part tells you what you need, what to do, what y
 
 ![Cat-ear case, CAD render](../case/cad_render.png)
 
-> **Release status.** The `firmware/` folder is being prepared for release; until then, Part 3 and Part 4 describe the process, and the commands in them are the ones I use on my own copy. Everything on the computer side (Parts 6, 7 and 10), the case dimensions (Part 2) and the pixel art (Part 9) are in this repo and work today. Items marked **(to be added)** are not published yet.
+> **Release status.** The board firmware is in [`firmware/`](../firmware/README.md). Everything on the computer side (Parts 6, 7 and 10), the case dimensions (Part 2) and the pixel art (Part 9) are in this repo and work today. Items marked **(to be added)** are not published yet.
 
 ## Contents
 
@@ -137,7 +137,7 @@ STL files: `case/stl/` **(to be added)**. Until they are published, you can mode
 
 ## Part 3. Build and flash the firmware
 
-> **The `firmware/` folder is being prepared for release; until then this part describes the process.** The firmware is based on [xiaozhi-esp32](https://github.com/78/xiaozhi-esp32) (MIT). It contains third-party character art that cannot be republished, so I am separating it before release. The steps below are the ones I use on my own copy.
+> The firmware is in [`firmware/`](../firmware/README.md). It is based on [xiaozhi-esp32](https://github.com/78/xiaozhi-esp32) (MIT), with the voice-assistant parts removed, and it contains only my own characters.
 
 **What you need:** the board connected to your computer with a USB-C data cable, and ESP-IDF installed.
 
@@ -202,7 +202,7 @@ On the first boot the board has no Wi-Fi saved, so it starts its own temporary W
 4. Pick your home Wi-Fi from the list, enter the password, and save.
 5. The board leaves setup mode and joins your Wi-Fi. The setup guide disappears.
 
-**You should see:** the idle screen with a character walking over a background, and the usage limit cells in the top corners.
+**You should see:** the idle screen with the characters sitting in a scene, and the usage limit cells in the top corners.
 
 **Tips**
 
@@ -394,10 +394,10 @@ curl -d '{"weather":{"kind":"rain","temp":18,"night":false}}' http://<BOARD_IP>/
 
 ```bash
 curl -s -X POST http://<BOARD_IP>/usage -H 'Content-Type: application/json' \
-  -d '{"diary":{"token":"<YOUR_TOKEN>","me":"mom"}}'
+  -d '{"diary":{"url":"https://<YOUR_DIARY_SERVER>","token":"<YOUR_TOKEN>","me":"mom"}}'
 ```
 
-Use `"me":"dad"` for the other board. The server address is stored on the board; see the firmware docs for the setting once the firmware is released. The board only shows the diary menu after it has a token.
+Use `"me":"dad"` for the other board. Send the server address (`url`, https only) together with the token or before it: changing the address later clears the stored token. You can also bake a default address into the build with `CONFIG_DIARY_DEFAULT_URL`. The board only shows the diary menu after it has both an address and a token.
 
 **JSON shapes**
 
@@ -409,7 +409,7 @@ Ultrasound, `GET /api/board?part=ultrasound`:
   "visits": 4,
   "photos": 15,
   "items": [
-    {"id": "v4", "date": "2026-11-16", "week": [25, 4],
+    {"id": "v4", "date": "2026-11-16", "week": [20, 3],
      "photos": ["<signed-photo-url>", "<signed-photo-url>"]}
   ]
 }
@@ -423,9 +423,9 @@ Mom's health, `GET /api/board?part=health`:
 {
   "part": "health",
   "date": "2026-11-16",
-  "today": {"kcal": 1294, "caffeine_mg": 40, "count": 3},
+  "today": {"kcal": 1500, "caffeine_mg": 50, "count": 3},
   "limits": {"caffeine_mg": 200},
-  "weight": {"kg": 58.2, "date": "2026-11-15", "goal_max_kg": 63},
+  "weight": {"kg": 55.0, "date": "2026-11-15", "goal_max_kg": 60},
   "meals": [
     {"meal": "breakfast", "items": [{"name": "toast", "risk": null}]}
   ],
@@ -433,15 +433,15 @@ Mom's health, `GET /api/board?part=health`:
 }
 ```
 
-`weight` can be `null`. `exercise.last` can be `null`. An item with a `risk` value is drawn in yellow with a `!`. The fields in `today` beyond `kcal` and `caffeine_mg` are my own server's; see the firmware source once released for the exact set it reads.
+`weight` can be `null`. `exercise.last` can be `null`. An item with a `risk` value is drawn in yellow with a `!`. The fields in `today` beyond `kcal` and `caffeine_mg` are my own server's; `firmware/main/display/usage/manbok_data.h` lists the exact set the board reads.
 
 Birth prep, `GET /api/board?part=prep`:
 
 ```json
 {
   "part": "prep",
-  "birth": "2027-02-10",
-  "dday": 86,
+  "birth": "2027-01-31",
+  "dday": 76,
   "open": 7,
   "items": [
     {"due": "2026-12-01", "title": "Pack hospital bag"},
@@ -452,7 +452,7 @@ Birth prep, `GET /api/board?part=prep`:
 
 The board sorts items by nearest due date, and `due: null` shows a dash.
 
-Diary list, `GET /api/board` (no `part`): the latest 10 entries, each with its date, who wrote it (`mom` or `dad`), mood, text, and the first photo (`photo`), up to 10 photos (`photos`) and a count (`photo_count`). I did not document the exact field names here; see `docs/manbok-diary.md` in the full firmware release.
+Diary list, `GET /api/board` (no `part`): the latest 10 entries, each with its date, who wrote it (`mom` or `dad`), mood, text, and the first photo (`photo`), up to 10 photos (`photos`) and a count (`photo_count`). The exact fields the board reads are in `firmware/main/display/usage/diary_data.h`.
 
 **Test without a server** by asking the board to open a panel:
 
@@ -487,7 +487,7 @@ curl -d '{"manbok_fetch":1}'              http://<BOARD_IP>/usage   # fetch the 
    python3 tools/gen_pack.py packs/<name> out.cc
    ```
 
-   The firmware build calls this script by itself. Using it needs the `firmware/` folder, which is **(to be added)**.
+   The firmware build calls its own copy, `firmware/tools/gen_pack.py`, by itself.
 
 **Sounds.** The notification sounds are your pets' voices. `tools/import_notify_sounds.py` cuts six short clips from your recordings, converts them to 16 kHz mono, filters noise, sets the volume and writes six `.pcm` files that the firmware embeds. It needs `ffmpeg` on your PATH.
 
@@ -552,13 +552,14 @@ Or set `SCREEN_URL=http://<BOARD_IP>/screen` instead. You can also convert a raw
 ## Part 11. Credits and licenses
 
 - **Firmware base:** [xiaozhi-esp32](https://github.com/78/xiaozhi-esp32) by 78, MIT license.
-- **Pixel font:** [Galmuri](https://github.com/quiple/galmuri) (Galmuri11 / Galmuri14), SIL Open Font License 1.1. Used to pre-render Korean text for the board. Font files are not included.
+- **Pixel font:** [Galmuri](https://github.com/quiple/galmuri) (Galmuri11 / Galmuri14), SIL Open Font License 1.1. Used to pre-render Korean text for the board; `firmware/packs/gift/font_galmuri11_12_1.bin` is a 12px Galmuri11 bitmap for the ticker.
 - **Weather data:** [Open-Meteo](https://open-meteo.com/).
 - **Baby sounds:** Wikimedia Commons, public domain.
   - [Baby 5 months old gabbling laughing practising voice](https://commons.wikimedia.org/wiki/File:Baby_5_months_old_gabbling_laughing_practising_voice.ogg)
   - [Even tempered baby 14 months communicative](https://commons.wikimedia.org/wiki/File:Even_tempered_baby_14_months_communicative.ogg)
-- **Cat sounds:** the author's own recordings of two pet cats (not included).
+- **Cat sounds:** the author's own recordings of two pet cats, in `firmware/main/sounds/` (see `firmware/NOTICE`).
 - **Code** (`host/`, `tools/`): MIT, see `LICENSE`.
+- **Firmware** (`firmware/`): code MIT, see `firmware/LICENSE`; character art, scene art and cat recordings see `firmware/NOTICE`.
 - **Character art and photos** (`art/`, `case/*.jpg`, `case/*.png`): (c) the author, all rights reserved. They are not covered by the MIT license.
 
 Project repository: <https://github.com/wineny/desk-buddies>

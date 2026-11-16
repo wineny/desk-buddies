@@ -1,0 +1,89 @@
+{
+  "name": "bboketer",
+  "base": "out/bboketer_img",
+  "spec": "overlays/bboketer.json",
+  "wear": [],
+  "grid": [
+    53,
+    61
+  ],
+  "cell_px": 1,
+  "states": {
+    "idle": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "thinking": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "working": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "juggling": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "permission": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "error": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "done": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "sleeping": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "tap": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "double": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "pet": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "sneeze": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "pout": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "dizzy": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    },
+    "highfive": {
+      "fps": 1,
+      "frames": 1,
+      "items": false
+    }
+  },
+  "board": "board/pp_<state>_0_img.c (I8 라인아트, 1배, USER1 = 아래 가운데 맞춤) — tools/apply_lineart.py"
+}

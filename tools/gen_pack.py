@@ -26,7 +26,7 @@ pack.json:
                                            #   배경마다 몸 뒤 그림 + raise 만큼 몸 올림. 없으면 바닥에 앉는다
       "scenes_when_shared": true,          # (선택) 장면 팩과 같이 구우면 그 장면을 같이 쓴다(옛 items·seats·ride 는 뺀다)
       "scene_prefix": "mb_",               # (선택) 장면 몸·모자 assets 이름 앞머리
-      "scenes": true                       # (선택) 장면 전용 팩. 배경·옷장이 장면 9개·전용 옷 탭으로 돈다
+      "scenes": true                       # (선택) 장면 전용 팩(뽀케터). 배경·옷장이 장면 9개·전용 옷 탭으로 돈다
     }
 
 세트 manifest 의 states.<st>.offsets([[dx,dy],...])·items(bool) 는 아이템 오버레이가 프레임을 따라가는 데 쓴다
@@ -94,7 +94,7 @@ def offsets_of(sym_prefix: str, st: str, spec: dict) -> tuple[list[int], bool]:
     return flat, bool(spec.get("items", False))
 
 
-SLOT_ORDER = ["head", "face", "hand", "neck"]   # ClawdSlot 순서 (neck = fx 자리, item_tables.h)
+SLOT_ORDER = ["head", "face", "hand", "neck"]   # OutfitSlot 순서 (neck = fx 자리, item_tables.h)
 
 
 # UsageSky 순서 (usage_screen.h) — 자리 소품 표는 이 순서로 kUsageSkyCount 개를 채운다.
@@ -136,7 +136,7 @@ def seat_tables(pack_dir: Path, pack: dict, name: str) -> tuple[list[str], list[
 
 
 def item_tables(pack_dir: Path, pack: dict, name: str) -> tuple[list[str], list[str], str]:
-    """pack.json "items" 폴더의 items.json → 슬롯별 ClawdItem 테이블. (externs, 테이블 정의 줄, 초기화 식)"""
+    """pack.json "items" 폴더의 items.json → 슬롯별 OutfitItem 테이블. (externs, 테이블 정의 줄, 초기화 식)"""
     folder = pack.get("items")
     if folder is None:
         return [], [], "{nullptr, nullptr, nullptr, nullptr}, {0, 0, 0, 0}, nullptr"
@@ -169,7 +169,7 @@ def item_tables(pack_dir: Path, pack: dict, name: str) -> tuple[list[str], list[
         x, y, w, h = (int(it.get(k, 0)) for k in ("x", "y", "w", "h"))
         if not (0 <= x <= 127 and 0 <= y <= 127 and 1 <= w <= 255 and 1 <= h <= 255):
             fail(f"items.json: {key} 의 x/y/w/h 가 범위를 넘는다 ({x},{y},{w},{h})")
-        # ClawdItem{key, dx, dy, w, h, img, img_l, thumb}: 팩 아이템은 프레임 좌표 1px 셀, 반전본 없음(nullptr)
+        # OutfitItem{key, dx, dy, w, h, img, img_l, thumb}: 팩 아이템은 프레임 좌표 1px 셀, 반전본 없음(nullptr)
         by_slot[slot].append(f'    {{"{key}", {x}, {y}, {w}, {h}, &{img}, nullptr, &{thumb}}},')
     lines: list[str] = []
     ptrs: list[str] = []
@@ -177,7 +177,7 @@ def item_tables(pack_dir: Path, pack: dict, name: str) -> tuple[list[str], list[
     for slot in SLOT_ORDER:
         rows = by_slot[slot]
         arr = f"kItems_{name}_{slot}"
-        lines.append(f"const ClawdItem {arr}[] = {{")
+        lines.append(f"const OutfitItem {arr}[] = {{")
         lines.append(f'    {{"none", 0, 0, 0, 0, nullptr, nullptr, &{none_thumb}}},')
         lines += rows
         lines.append("};")

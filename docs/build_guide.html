@@ -28,10 +28,7 @@ do, what you should see, and what to try if it does not work.</p>
 <p><img src="../case/cad_render.png"
 alt="Cat-ear case, CAD render" /></p>
 <blockquote>
-<p><strong>Release status.</strong> The <code>firmware/</code> folder is
-being prepared for release; until then, Part 3 and Part 4 describe the
-process, and the commands in them are the ones I use on my own copy.
-Everything on the computer side (Parts 6, 7 and 10), the case dimensions
+<p><strong>Release status.</strong> The board firmware is in <a href="../firmware/README.md"><code>firmware/</code></a>. Everything on the computer side (Parts 6, 7 and 10), the case dimensions
 (Part 2) and the pixel art (Part 9) are in this repo and work today.
 Items marked <strong>(to be added)</strong> are not published yet.</p>
 </blockquote>
@@ -243,13 +240,7 @@ fine for power only.</p>
 <h2 id="part-3-build-and-flash-the-firmware">Part 3. Build and flash the
 firmware</h2>
 <blockquote>
-<p><strong>The <code>firmware/</code> folder is being prepared for
-release; until then this part describes the process.</strong> The
-firmware is based on <a
-href="https://github.com/78/xiaozhi-esp32">xiaozhi-esp32</a> (MIT). It
-contains third-party character art that cannot be republished, so I am
-separating it before release. The steps below are the ones I use on my
-own copy.</p>
+<p>The firmware is in <a href="../firmware/README.md"><code>firmware/</code></a>. It is based on <a href="https://github.com/78/xiaozhi-esp32">xiaozhi-esp32</a> (MIT), with the voice-assistant parts removed, and it contains only my own characters.</p>
 </blockquote>
 <p><strong>What you need:</strong> the board connected to your computer
 with a USB-C data cable, and ESP-IDF installed.</p>
@@ -316,8 +307,7 @@ save.</p></li>
 <li><p>The board leaves setup mode and joins your Wi-Fi. The setup guide
 disappears.</p></li>
 </ol>
-<p><strong>You should see:</strong> the idle screen with a character
-walking over a background, and the usage limit cells in the top
+<p><strong>You should see:</strong> the idle screen with the characters sitting in a scene, and the usage limit cells in the top
 corners.</p>
 <p><strong>Tips</strong></p>
 <ul>
@@ -578,11 +568,8 @@ per board, using the board's token and who is writing (<code>mom</code>
 or <code>dad</code>, so a board alerts only for the other person's
 entries):</p>
 <pre class="bash"><code>curl -s -X POST http://&lt;BOARD_IP&gt;/usage -H &#39;Content-Type: application/json&#39; \
-  -d &#39;{&quot;diary&quot;:{&quot;token&quot;:&quot;&lt;YOUR_TOKEN&gt;&quot;,&quot;me&quot;:&quot;mom&quot;}}&#39;</code></pre>
-<p>Use <code>"me":"dad"</code> for the other board. The server address
-is stored on the board; see the firmware docs for the setting once the
-firmware is released. The board only shows the diary menu after it has a
-token.</p>
+  -d &#39;{&quot;diary&quot;:{&quot;url&quot;:&quot;https://&lt;YOUR_DIARY_SERVER&gt;&quot;,&quot;token&quot;:&quot;&lt;YOUR_TOKEN&gt;&quot;,&quot;me&quot;:&quot;mom&quot;}}&#39;</code></pre>
+<p>Use <code>"me":"dad"</code> for the other board. Send the server address (<code>url</code>, https only) together with the token or before it: changing the address later clears the stored token. You can also bake a default address into the build with <code>CONFIG_DIARY_DEFAULT_URL</code>. The board only shows the diary menu after it has both an address and a token.</p>
 <p><strong>JSON shapes</strong></p>
 <p>Ultrasound, <code>GET /api/board?part=ultrasound</code>:</p>
 <pre class="json"><code>{
@@ -590,7 +577,7 @@ token.</p>
   &quot;visits&quot;: 4,
   &quot;photos&quot;: 15,
   &quot;items&quot;: [
-    {&quot;id&quot;: &quot;v4&quot;, &quot;date&quot;: &quot;2026-11-16&quot;, &quot;week&quot;: [25, 4],
+    {&quot;id&quot;: &quot;v4&quot;, &quot;date&quot;: &quot;2026-11-16&quot;, &quot;week&quot;: [20, 3],
      &quot;photos&quot;: [&quot;&lt;signed-photo-url&gt;&quot;, &quot;&lt;signed-photo-url&gt;&quot;]}
   ]
 }</code></pre>
@@ -600,9 +587,9 @@ token.</p>
 <pre class="json"><code>{
   &quot;part&quot;: &quot;health&quot;,
   &quot;date&quot;: &quot;2026-11-16&quot;,
-  &quot;today&quot;: {&quot;kcal&quot;: 1294, &quot;caffeine_mg&quot;: 40, &quot;count&quot;: 3},
+  &quot;today&quot;: {&quot;kcal&quot;: 1500, &quot;caffeine_mg&quot;: 50, &quot;count&quot;: 3},
   &quot;limits&quot;: {&quot;caffeine_mg&quot;: 200},
-  &quot;weight&quot;: {&quot;kg&quot;: 58.2, &quot;date&quot;: &quot;2026-11-15&quot;, &quot;goal_max_kg&quot;: 63},
+  &quot;weight&quot;: {&quot;kg&quot;: 55.0, &quot;date&quot;: &quot;2026-11-15&quot;, &quot;goal_max_kg&quot;: 60},
   &quot;meals&quot;: [
     {&quot;meal&quot;: &quot;breakfast&quot;, &quot;items&quot;: [{&quot;name&quot;: &quot;toast&quot;, &quot;risk&quot;: null}]}
   ],
@@ -612,13 +599,12 @@ token.</p>
 <code>exercise.last</code> can be <code>null</code>. An item with a
 <code>risk</code> value is drawn in yellow with a <code>!</code>. The
 fields in <code>today</code> beyond <code>kcal</code> and
-<code>caffeine_mg</code> are my own server's; see the firmware source
-once released for the exact set it reads.</p>
+<code>caffeine_mg</code> are my own server's; <code>firmware/main/display/usage/manbok_data.h</code> lists the exact set the board reads.</p>
 <p>Birth prep, <code>GET /api/board?part=prep</code>:</p>
 <pre class="json"><code>{
   &quot;part&quot;: &quot;prep&quot;,
-  &quot;birth&quot;: &quot;2027-02-10&quot;,
-  &quot;dday&quot;: 86,
+  &quot;birth&quot;: &quot;2027-01-31&quot;,
+  &quot;dday&quot;: 76,
   &quot;open&quot;: 7,
   &quot;items&quot;: [
     {&quot;due&quot;: &quot;2026-12-01&quot;, &quot;title&quot;: &quot;Pack hospital bag&quot;},
@@ -631,9 +617,7 @@ shows a dash.</p>
 latest 10 entries, each with its date, who wrote it (<code>mom</code> or
 <code>dad</code>), mood, text, and the first photo (<code>photo</code>),
 up to 10 photos (<code>photos</code>) and a count
-(<code>photo_count</code>). I did not document the exact field names
-here; see <code>docs/manbok-diary.md</code> in the full firmware
-release.</p>
+(<code>photo_count</code>). The exact fields the board reads are in <code>firmware/main/display/usage/diary_data.h</code>.</p>
 <p><strong>Test without a server</strong> by asking the board to open a
 panel:</p>
 <pre class="bash"><code>curl -d &#39;{&quot;manbok_menu&quot;:1}&#39;               http://&lt;BOARD_IP&gt;/usage   # open the 6-item menu
@@ -675,9 +659,7 @@ fewer.</p></li>
 <li><p>Generate the C++ table the firmware compiles in. You can run it
 by hand to check your files first:</p>
 <pre class="bash"><code>python3 tools/gen_pack.py packs/&lt;name&gt; out.cc</code></pre>
-<p>The firmware build calls this script by itself. Using it needs the
-<code>firmware/</code> folder, which is <strong>(to be
-added)</strong>.</p></li>
+<p>The firmware build calls its own copy, <code>firmware/tools/gen_pack.py</code>, by itself.</p></li>
 </ol>
 <p><strong>Sounds.</strong> The notification sounds are your pets'
 voices. <code>tools/import_notify_sounds.py</code> cuts six short clips
@@ -812,8 +794,7 @@ href="https://github.com/78/xiaozhi-esp32">xiaozhi-esp32</a> by 78, MIT
 license.</li>
 <li><strong>Pixel font:</strong> <a
 href="https://github.com/quiple/galmuri">Galmuri</a> (Galmuri11 /
-Galmuri14), SIL Open Font License 1.1. Used to pre-render Korean text
-for the board. Font files are not included.</li>
+Galmuri14), SIL Open Font License 1.1. Used to pre-render Korean text for the board; <code>firmware/packs/gift/font_galmuri11_12_1.bin</code> is a 12px Galmuri11 bitmap for the ticker.</li>
 <li><strong>Weather data:</strong> <a
 href="https://open-meteo.com/">Open-Meteo</a>.</li>
 <li><strong>Baby sounds:</strong> Wikimedia Commons, public domain.
@@ -826,9 +807,10 @@ href="https://commons.wikimedia.org/wiki/File:Even_tempered_baby_14_months_commu
 tempered baby 14 months communicative</a></li>
 </ul></li>
 <li><strong>Cat sounds:</strong> the author's own recordings of two pet
-cats (not included).</li>
+cats, in <code>firmware/main/sounds/</code> (see <code>firmware/NOTICE</code>).</li>
 <li><strong>Code</strong> (<code>host/</code>, <code>tools/</code>):
 MIT, see <code>LICENSE</code>.</li>
+<li><strong>Firmware</strong> (<code>firmware/</code>): code MIT, see <code>firmware/LICENSE</code>; character art, scene art and cat recordings see <code>firmware/NOTICE</code>.</li>
 <li><strong>Character art and photos</strong> (<code>art/</code>,
 <code>case/*.jpg</code>, <code>case/*.png</code>): (c) the author, all
 rights reserved. They are not covered by the MIT license.</li>

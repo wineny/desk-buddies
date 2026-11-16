@@ -1,0 +1,415 @@
+{
+  "name": "manbok",
+  "base": "out/mb_wk_img",
+  "spec": "overlays/mb_wk.json",
+  "grid": [
+    49,
+    64
+  ],
+  "frame": [
+    98,
+    64
+  ],
+  "origin": [
+    24,
+    0
+  ],
+  "coords": "x,y = 보드 프레임(98×64) 좌상단 기준 픽셀. 펌웨어는 여기에 상태 프레임별 offsets(dx,dy) 를 더한다",
+  "slots": {
+    "head": [
+      "cap",
+      "party",
+      "beanie",
+      "nightcap",
+      "hardhat",
+      "chef",
+      "gradcap",
+      "headphones",
+      "catears",
+      "strawhat",
+      "santahat",
+      "leaf"
+    ],
+    "face": [
+      "shades",
+      "glasses",
+      "pacifier",
+      "mask"
+    ],
+    "hand": [
+      "coffee",
+      "bottle",
+      "book",
+      "laptop",
+      "balloon",
+      "umbrella",
+      "fishbread",
+      "icecream",
+      "cupcake",
+      "donut",
+      "watermelon",
+      "snowman",
+      "fan"
+    ],
+    "neck": [
+      "bow",
+      "scarf",
+      "bib"
+    ]
+  },
+  "none_thumb": "pp_manbok_thumb_none_img.c",
+  "items": [
+    {
+      "key": "cap",
+      "slot": "head",
+      "label": "모자",
+      "x": 30,
+      "y": 2,
+      "w": 32,
+      "h": 25,
+      "img": "pp_manbok_item_cap_img.c",
+      "thumb": "pp_manbok_thumb_cap_img.c"
+    },
+    {
+      "key": "party",
+      "slot": "head",
+      "label": "고깔",
+      "x": 33,
+      "y": 0,
+      "w": 26,
+      "h": 20,
+      "img": "pp_manbok_item_party_img.c",
+      "thumb": "pp_manbok_thumb_party_img.c"
+    },
+    {
+      "key": "beanie",
+      "slot": "head",
+      "label": "털모자",
+      "x": 30,
+      "y": 2,
+      "w": 32,
+      "h": 22,
+      "img": "pp_manbok_item_beanie_img.c",
+      "thumb": "pp_manbok_thumb_beanie_img.c"
+    },
+    {
+      "key": "nightcap",
+      "slot": "head",
+      "label": "잠옷모자",
+      "x": 30,
+      "y": 1,
+      "w": 41,
+      "h": 25,
+      "img": "pp_manbok_item_nightcap_img.c",
+      "thumb": "pp_manbok_thumb_nightcap_img.c"
+    },
+    {
+      "key": "hardhat",
+      "slot": "head",
+      "label": "안전모",
+      "x": 32,
+      "y": 3,
+      "w": 28,
+      "h": 21,
+      "img": "pp_manbok_item_hardhat_img.c",
+      "thumb": "pp_manbok_thumb_hardhat_img.c"
+    },
+    {
+      "key": "chef",
+      "slot": "head",
+      "label": "요리사",
+      "x": 30,
+      "y": 1,
+      "w": 31,
+      "h": 19,
+      "img": "pp_manbok_item_chef_img.c",
+      "thumb": "pp_manbok_thumb_chef_img.c"
+    },
+    {
+      "key": "gradcap",
+      "slot": "head",
+      "label": "학사모",
+      "x": 28,
+      "y": 0,
+      "w": 38,
+      "h": 24,
+      "img": "pp_manbok_item_gradcap_img.c",
+      "thumb": "pp_manbok_thumb_gradcap_img.c"
+    },
+    {
+      "key": "headphones",
+      "slot": "head",
+      "label": "헤드폰",
+      "x": 25,
+      "y": 8,
+      "w": 40,
+      "h": 25,
+      "img": "pp_manbok_item_headphones_img.c",
+      "thumb": "pp_manbok_thumb_headphones_img.c"
+    },
+    {
+      "key": "catears",
+      "slot": "head",
+      "label": "고양이귀",
+      "x": 33,
+      "y": 10,
+      "w": 29,
+      "h": 12,
+      "img": "pp_manbok_item_catears_img.c",
+      "thumb": "pp_manbok_thumb_catears_img.c"
+    },
+    {
+      "key": "strawhat",
+      "slot": "head",
+      "label": "밀짚모자",
+      "x": 26,
+      "y": 4,
+      "w": 39,
+      "h": 24,
+      "img": "pp_manbok_item_strawhat_img.c",
+      "thumb": "pp_manbok_thumb_strawhat_img.c"
+    },
+    {
+      "key": "santahat",
+      "slot": "head",
+      "label": "산타모자",
+      "x": 30,
+      "y": 2,
+      "w": 43,
+      "h": 28,
+      "img": "pp_manbok_item_santahat_img.c",
+      "thumb": "pp_manbok_thumb_santahat_img.c"
+    },
+    {
+      "key": "leaf",
+      "slot": "head",
+      "label": "단풍잎",
+      "x": 26,
+      "y": 5,
+      "w": 19,
+      "h": 16,
+      "img": "pp_manbok_item_leaf_img.c",
+      "thumb": "pp_manbok_thumb_leaf_img.c"
+    },
+    {
+      "key": "shades",
+      "slot": "face",
+      "label": "선글라스",
+      "x": 29,
+      "y": 32,
+      "w": 27,
+      "h": 8,
+      "img": "pp_manbok_item_shades_img.c",
+      "thumb": "pp_manbok_thumb_shades_img.c"
+    },
+    {
+      "key": "glasses",
+      "slot": "face",
+      "label": "뿔테안경",
+      "x": 31,
+      "y": 31,
+      "w": 22,
+      "h": 11,
+      "img": "pp_manbok_item_glasses_img.c",
+      "thumb": "pp_manbok_thumb_glasses_img.c"
+    },
+    {
+      "key": "pacifier",
+      "slot": "face",
+      "label": "쪽쪽이",
+      "x": 39,
+      "y": 41,
+      "w": 9,
+      "h": 6,
+      "img": "pp_manbok_item_pacifier_img.c",
+      "thumb": "pp_manbok_thumb_pacifier_img.c"
+    },
+    {
+      "key": "mask",
+      "slot": "face",
+      "label": "마스크",
+      "x": 28,
+      "y": 37,
+      "w": 34,
+      "h": 10,
+      "img": "pp_manbok_item_mask_img.c",
+      "thumb": "pp_manbok_thumb_mask_img.c"
+    },
+    {
+      "key": "coffee",
+      "slot": "hand",
+      "label": "커피",
+      "x": 40,
+      "y": 41,
+      "w": 14,
+      "h": 10,
+      "img": "pp_manbok_item_coffee_img.c",
+      "thumb": "pp_manbok_thumb_coffee_img.c"
+    },
+    {
+      "key": "bottle",
+      "slot": "hand",
+      "label": "젖병",
+      "x": 42,
+      "y": 41,
+      "w": 7,
+      "h": 13,
+      "img": "pp_manbok_item_bottle_img.c",
+      "thumb": "pp_manbok_thumb_bottle_img.c"
+    },
+    {
+      "key": "book",
+      "slot": "hand",
+      "label": "책",
+      "x": 31,
+      "y": 46,
+      "w": 27,
+      "h": 12,
+      "img": "pp_manbok_item_book_img.c",
+      "thumb": "pp_manbok_thumb_book_img.c"
+    },
+    {
+      "key": "laptop",
+      "slot": "hand",
+      "label": "노트북",
+      "x": 30,
+      "y": 48,
+      "w": 29,
+      "h": 15,
+      "img": "pp_manbok_item_laptop_img.c",
+      "thumb": "pp_manbok_thumb_laptop_img.c"
+    },
+    {
+      "key": "balloon",
+      "slot": "hand",
+      "label": "풍선",
+      "x": 57,
+      "y": 13,
+      "w": 15,
+      "h": 32,
+      "img": "pp_manbok_item_balloon_img.c",
+      "thumb": "pp_manbok_thumb_balloon_img.c"
+    },
+    {
+      "key": "umbrella",
+      "slot": "hand",
+      "label": "우산",
+      "x": 46,
+      "y": 0,
+      "w": 27,
+      "h": 47,
+      "img": "pp_manbok_item_umbrella_img.c",
+      "thumb": "pp_manbok_thumb_umbrella_img.c"
+    },
+    {
+      "key": "fishbread",
+      "slot": "hand",
+      "label": "붕어빵",
+      "x": 35,
+      "y": 42,
+      "w": 21,
+      "h": 11,
+      "img": "pp_manbok_item_fishbread_img.c",
+      "thumb": "pp_manbok_thumb_fishbread_img.c"
+    },
+    {
+      "key": "icecream",
+      "slot": "hand",
+      "label": "아이스크림",
+      "x": 40,
+      "y": 42,
+      "w": 11,
+      "h": 16,
+      "img": "pp_manbok_item_icecream_img.c",
+      "thumb": "pp_manbok_thumb_icecream_img.c"
+    },
+    {
+      "key": "cupcake",
+      "slot": "hand",
+      "label": "컵케이크",
+      "x": 39,
+      "y": 40,
+      "w": 13,
+      "h": 17,
+      "img": "pp_manbok_item_cupcake_img.c",
+      "thumb": "pp_manbok_thumb_cupcake_img.c"
+    },
+    {
+      "key": "donut",
+      "slot": "hand",
+      "label": "도넛",
+      "x": 38,
+      "y": 42,
+      "w": 15,
+      "h": 13,
+      "img": "pp_manbok_item_donut_img.c",
+      "thumb": "pp_manbok_thumb_donut_img.c"
+    },
+    {
+      "key": "watermelon",
+      "slot": "hand",
+      "label": "수박",
+      "x": 35,
+      "y": 42,
+      "w": 21,
+      "h": 12,
+      "img": "pp_manbok_item_watermelon_img.c",
+      "thumb": "pp_manbok_thumb_watermelon_img.c"
+    },
+    {
+      "key": "snowman",
+      "slot": "hand",
+      "label": "눈사람",
+      "x": 34,
+      "y": 40,
+      "w": 23,
+      "h": 20,
+      "img": "pp_manbok_item_snowman_img.c",
+      "thumb": "pp_manbok_thumb_snowman_img.c"
+    },
+    {
+      "key": "fan",
+      "slot": "hand",
+      "label": "부채",
+      "x": 34,
+      "y": 43,
+      "w": 23,
+      "h": 14,
+      "img": "pp_manbok_item_fan_img.c",
+      "thumb": "pp_manbok_thumb_fan_img.c"
+    },
+    {
+      "key": "bow",
+      "slot": "neck",
+      "label": "나비넥타이",
+      "x": 36,
+      "y": 40,
+      "w": 14,
+      "h": 9,
+      "img": "pp_manbok_item_bow_img.c",
+      "thumb": "pp_manbok_thumb_bow_img.c"
+    },
+    {
+      "key": "scarf",
+      "slot": "neck",
+      "label": "목도리",
+      "x": 32,
+      "y": 41,
+      "w": 24,
+      "h": 9,
+      "img": "pp_manbok_item_scarf_img.c",
+      "thumb": "pp_manbok_thumb_scarf_img.c"
+    },
+    {
+      "key": "bib",
+      "slot": "neck",
+      "label": "턱받이",
+      "x": 36,
+      "y": 43,
+      "w": 16,
+      "h": 10,
+      "img": "pp_manbok_item_bib_img.c",
+      "thumb": "pp_manbok_thumb_bib_img.c"
+    }
+  ]
+}
