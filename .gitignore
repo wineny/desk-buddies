@@ -8,3 +8,6 @@ host/board.json
 .venv/
 sdkconfig
 sdkconfig.old
+
+# local tool state
+.omc/
