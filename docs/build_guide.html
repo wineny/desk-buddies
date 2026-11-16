@@ -1,0 +1,838 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Desk Buddies: Build Guide</title><style>
+@page{size:A4;margin:16mm 15mm}
+*{box-sizing:border-box}
+body{font-family:-apple-system,"Helvetica Neue",Arial,sans-serif;font-size:11pt;line-height:1.5;color:#222;margin:0}
+h1{font-size:26pt;color:#e8730c;margin:0 0 8pt}
+h2{font-size:16pt;color:#fff;background:#e8730c;padding:5pt 9pt;border-radius:4pt;margin:22pt 0 8pt;break-after:avoid}
+h2:first-of-type{}
+p,li{orphans:3;widows:3}
+a{color:#b4540a}
+pre{background:#f3f1ee;border:1px solid #ddd;border-left:4px solid #e8730c;border-radius:3pt;padding:7pt 9pt;font-size:8.8pt;line-height:1.35;white-space:pre-wrap;word-break:break-all;break-inside:avoid}
+code{font-family:Menlo,Consolas,monospace;font-size:9pt;background:#f3f1ee;padding:0 2pt;border-radius:2pt}
+pre code{background:none;padding:0;font-size:inherit}
+table{border-collapse:collapse;width:100%;margin:6pt 0 10pt;font-size:9.8pt}tr{break-inside:avoid}
+th,td{border:1px solid #ccc;padding:3pt 6pt;text-align:left;vertical-align:top}
+th{background:#fbe6d2}
+blockquote{margin:8pt 0;padding:6pt 10pt;background:#fff4e8;border-left:4px solid #e8730c}
+blockquote p{margin:2pt 0}
+img{max-width:100%;max-height:62mm;display:block;margin:8pt auto;break-inside:avoid}
+p>img+img,p>img{}
+hr{border:0;border-top:1px solid #ddd;margin:14pt 0}
+img[alt^="Rona"],img[alt^="Rozzi"],img[alt^="Manbok"]{max-height:48mm}pre.sourceCode,div.sourceCode{background:none}</style></head><body><h1 id="desk-buddies-build-guide">Desk Buddies: Build Guide</h1>
+<p>Build two small cat-eared pixel screens for two desks. They show your
+pets and your baby-to-be, pass messages and high-fives between each
+other over your home Wi-Fi, and show what your AI coding assistant is
+doing right now.</p>
+<p>Follow the parts in order. Each part tells you what you need, what to
+do, what you should see, and what to try if it does not work.</p>
+<p><img src="../case/cad_render.png"
+alt="Cat-ear case, CAD render" /></p>
+<blockquote>
+<p><strong>Release status.</strong> The <code>firmware/</code> folder is
+being prepared for release; until then, Part 3 and Part 4 describe the
+process, and the commands in them are the ones I use on my own copy.
+Everything on the computer side (Parts 6, 7 and 10), the case dimensions
+(Part 2) and the pixel art (Part 9) are in this repo and work today.
+Items marked <strong>(to be added)</strong> are not published yet.</p>
+</blockquote>
+<h2 id="contents">Contents</h2>
+<ol start="0" type="1">
+<li>Overview: how the pieces fit</li>
+<li>Parts and tools</li>
+<li>Print the cat-ear case</li>
+<li>Build and flash the firmware</li>
+<li>First boot and Wi-Fi setup</li>
+<li>Pair two boards</li>
+<li>Connect your AI coding assistant</li>
+<li>Usage limit and weather display</li>
+<li>Optional: baby diary, ultrasound, health, birth prep</li>
+<li>Make it your family: art and sounds</li>
+<li>Check the screen remotely, and troubleshooting</li>
+<li>Credits and licenses</li>
+</ol>
+<hr />
+<h2 id="part-0-overview-how-the-pieces-fit">Part 0. Overview: how the
+pieces fit</h2>
+<p>You build two identical boards. Each board is a small computer with a
+touch screen. They talk to each other directly over your home Wi-Fi,
+with no cloud account and no pairing step.</p>
+<pre><code>  Computer A (Claude Code)                 Computer B (Codex)
+  hooks -&gt; host/ scripts                   hooks -&gt; host/ scripts
+        |  HTTP POST /usage                      |  HTTP POST /usage
+        v                                        v
+   +-----------+   UDP broadcast, port 47801   +-----------+
+   |  Board A  | &lt;---------------------------&gt; |  Board B  |
+   | (desk A)  |  messages, replies, high-five | (desk B)  |
+   +-----------+  visit, poke                  +-----------+
+        ^                                            ^
+        |  HTTPS GET, about every 10 minutes (optional)
+        +------------- Your diary server ------------+
+                       (baby diary, ultrasound, health, birth prep)</code></pre>
+<p>Three data paths, from simplest to most optional:</p>
+<ol type="1">
+<li><strong>Board to board.</strong> UDP broadcast on port
+<code>47801</code> on the same Wi-Fi. This works as soon as both boards
+are on the same network.</li>
+<li><strong>Computer to board.</strong> Your AI coding tool runs a hook
+(a small script) on each event. The script sends a JSON message to the
+board's <code>/usage</code> address. This is how the board knows
+"working", "waiting for approval", "error", and your usage limit.</li>
+<li><strong>Server to board (optional).</strong> The board fetches JSON
+from a server you run. Skip this if you only want the pets and the
+assistant status.</li>
+</ol>
+<p><strong>Time and skill.</strong> Plan one weekend. You need to be
+comfortable running commands in a terminal. You do not need to write
+code.</p>
+<hr />
+<h2 id="part-1-parts-and-tools">Part 1. Parts and tools</h2>
+<p><strong>Parts (for two boards)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Qty</th>
+<th>Item</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>Freenove ESP32-S3 Display 2.8" (model ES3C28P)</td>
+<td>320x240 touch LCD, Wi-Fi, speaker. Must be the touch version</td>
+</tr>
+<tr>
+<td>2</td>
+<td>USB-C cable (data, not charge-only)</td>
+<td>One per board, for flashing and power</td>
+</tr>
+<tr>
+<td>2</td>
+<td>5 V USB power supply</td>
+<td>Any phone charger works</td>
+</tr>
+<tr>
+<td>about 100 g</td>
+<td>Orange PLA filament</td>
+<td>Any color works; orange is what the photos show</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tools</strong></p>
+<ul>
+<li>A 3D printer (FDM) and a slicer.</li>
+<li>A computer with macOS (tested) or Linux, with a terminal.</li>
+<li>Python 3.</li>
+<li>A 2.4 GHz Wi-Fi network at home. ESP32 boards do not join 5 GHz-only
+networks.</li>
+<li>Optional: <code>ffmpeg</code> (Part 9, sounds), Pillow
+(<code>pip install pillow</code>, Part 10 screen capture).</li>
+</ul>
+<p>You do not need to solder anything.</p>
+<p><img src="../case/printed_front.jpg"
+alt="Printed front of the case" /></p>
+<hr />
+<h2 id="part-2-print-the-cat-ear-case">Part 2. Print the cat-ear
+case</h2>
+<p><strong>What you need:</strong> a 3D printer, orange PLA, the board,
+and the dimensions below.</p>
+<p>STL files: <code>case/stl/</code> <strong>(to be added)</strong>.
+Until they are published, you can model your own case from the numbers
+in this part, or print any 2.8" ES3C28P case you like.</p>
+<p><strong>Dimensions of the board (ES3C28P)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PCB</td>
+<td>86.00 x 50.00 mm, 1.6 mm thick</td>
+</tr>
+<tr>
+<td>LCD + touch outline</td>
+<td>69.20 x 50.00 mm</td>
+</tr>
+<tr>
+<td>Visible area</td>
+<td>58.05 x 43.60 mm</td>
+</tr>
+<tr>
+<td>Active area</td>
+<td>57.60 x 43.20 mm (320 x 240 px)</td>
+</tr>
+<tr>
+<td>Front stack above PCB</td>
+<td>4.30 mm (0.5 adhesive + 2.3 LCD + 0.5 adhesive + 1.0 touch)</td>
+</tr>
+<tr>
+<td>Max total thickness</td>
+<td>10.60 mm</td>
+</tr>
+<tr>
+<td>Mounting holes</td>
+<td>78 x 42 mm spacing, diameter 3.20 mm</td>
+</tr>
+<tr>
+<td>Visible-area center offset</td>
+<td>3.015 mm sideways from the PCB center</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Design values used for my case</strong></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Screen window in the case</td>
+<td>58.85 x 44.40 mm (visible area + 0.4 mm each side)</td>
+</tr>
+<tr>
+<td>Board guide clearance</td>
+<td>0.5 mm per side</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Print settings (recommendations, not tested
+limits)</strong></p>
+<ul>
+<li>Material: PLA, orange.</li>
+<li>Layer height 0.2 mm, 2 to 3 walls, 15 to 20 % infill.</li>
+<li>Print the front shell with the screen window facing the bed or with
+supports for the ears, depending on how your STL is oriented.</li>
+<li>Print one case per board.</li>
+</ul>
+<p><strong>Steps</strong></p>
+<ol type="1">
+<li>Download the STL files from <code>case/stl/</code> once they are
+added, or use your own model made from the table above.</li>
+<li>Slice and print one case for each board.</li>
+<li>Remove supports and test the fit with the bare board before you
+flash anything. The board should slide in without force.</li>
+<li>Leave the case open for now. You will flash the board through its
+USB-C port in Part 3, and it is easier with the board outside the
+case.</li>
+</ol>
+<p><strong>Assembly (after Part 4 works)</strong></p>
+<ol type="1">
+<li>Hold the case with the screen window facing you.</li>
+<li>Slide the board in from the back, screen side toward the window,
+until the LCD sits flat behind the window.</li>
+<li>Close the back and plug in USB-C for power.</li>
+</ol>
+<p><img src="../case/printed_parts.jpg" alt="Printed parts" /></p>
+<p><strong>You should see:</strong> the screen centered in the window,
+with no black bezel showing on any side.</p>
+<p><strong>Tip.</strong> If the screen looks off-center, check the 3.015
+mm offset in the table. The visible area is not centered on the PCB.</p>
+<blockquote>
+<p>My own build runs the USB-C cable out through an extension flat cable
+inside the case. For flashing or reading logs, I take the extension out
+and plug the board in directly. A standard case without an extension is
+fine for power only.</p>
+</blockquote>
+<hr />
+<h2 id="part-3-build-and-flash-the-firmware">Part 3. Build and flash the
+firmware</h2>
+<blockquote>
+<p><strong>The <code>firmware/</code> folder is being prepared for
+release; until then this part describes the process.</strong> The
+firmware is based on <a
+href="https://github.com/78/xiaozhi-esp32">xiaozhi-esp32</a> (MIT). It
+contains third-party character art that cannot be republished, so I am
+separating it before release. The steps below are the ones I use on my
+own copy.</p>
+</blockquote>
+<p><strong>What you need:</strong> the board connected to your computer
+with a USB-C data cable, and ESP-IDF installed.</p>
+<p><strong>Steps</strong></p>
+<ol type="1">
+<li><p><strong>Install ESP-IDF.</strong> The firmware base targets
+ESP-IDF v6.0 or later (v6.0.2 recommended by the base project). Follow
+Espressif's official install guide, and note where you installed it. I
+install to <code>~/esp/esp-idf</code>.</p></li>
+<li><p><strong>Open a terminal and load the ESP-IDF environment</strong>
+(repeat in every new terminal):</p>
+<pre class="bash"><code>. ~/esp/esp-idf/export.sh</code></pre></li>
+<li><p><strong>Go to the firmware folder and build.</strong> The chip is
+an ESP32-S3, and the firmware's saved configuration is already set for
+the Freenove 2.8" display board.</p>
+<pre class="bash"><code>cd firmware
+idf.py build</code></pre></li>
+<li><p><strong>Find the serial port</strong> on macOS:</p>
+<pre class="bash"><code>ls /dev/cu.usbmodem*</code></pre></li>
+<li><p><strong>Flash.</strong> Replace the port with yours:</p>
+<pre class="bash"><code>idf.py -p /dev/cu.usbmodem1101 -b 460800 flash</code></pre>
+<p>If the flash stops halfway, run it again at a lower speed (for
+example <code>-b 115200</code>).</p></li>
+</ol>
+<p><strong>You should see:</strong> the build ends with a firmware file
+at <code>build/xiaozhi.bin</code>, and the flash log contains
+<code>Hash of data verified</code> five times. Then the board reboots
+and the screen turns on.</p>
+<p><strong>Tips</strong></p>
+<ul>
+<li><code>idf.py build</code> can report success even when it failed.
+Check the log for <code> error:</code> or
+<code>ninja: build stopped</code>, and check that
+<code>build/xiaozhi.bin</code> has a new timestamp.</li>
+<li>Do not erase the whole flash storage after the board has Wi-Fi saved
+on it. It also deletes the Wi-Fi settings.</li>
+<li>Opening a serial monitor on the board's USB port resets the board.
+Wait a few seconds and read again if the log looks empty.</li>
+<li>If the screen stays black after flashing, unplug and replug the USB
+cable (a real power cycle) before trying anything else.</li>
+<li>Some builds compile the character art for a specific "pack" through
+a setting in the build configuration. See Part 9 and
+<code>tools/gen_pack.py</code>.</li>
+</ul>
+<hr />
+<h2 id="part-4-first-boot-and-wi-fi-setup">Part 4. First boot and Wi-Fi
+setup</h2>
+<p><strong>What you need:</strong> a flashed board, a phone or laptop,
+and your home Wi-Fi name and password (2.4 GHz).</p>
+<p>On the first boot the board has no Wi-Fi saved, so it starts its own
+temporary Wi-Fi hotspot and shows a three-step "first time setup" guide
+on its screen.</p>
+<p><strong>Steps</strong></p>
+<ol type="1">
+<li><p>Power the board with USB-C. Wait for the setup guide on the
+screen.</p></li>
+<li><p>On your phone, open the Wi-Fi list and join the open hotspot
+named <code>Xiaozhi-</code> followed by four characters (for example
+<code>Xiaozhi-5855</code>; yours will differ).</p></li>
+<li><p>Open a browser and go to:</p>
+<pre><code>http://192.168.4.1</code></pre></li>
+<li><p>Pick your home Wi-Fi from the list, enter the password, and
+save.</p></li>
+<li><p>The board leaves setup mode and joins your Wi-Fi. The setup guide
+disappears.</p></li>
+</ol>
+<p><strong>You should see:</strong> the idle screen with a character
+walking over a background, and the usage limit cells in the top
+corners.</p>
+<p><strong>Tips</strong></p>
+<ul>
+<li>If the setup page does not open, check that your phone is still on
+the <code>Xiaozhi-</code> hotspot (some phones switch back to a network
+with internet).</li>
+<li>A wrong password drops the board back to setup mode after a timeout,
+and the guide returns.</li>
+<li>Repeat Part 4 for the second board.</li>
+<li>Give each board a fixed IP address in your router's settings if you
+can. It makes Part 6 more reliable.</li>
+</ul>
+<hr />
+<h2 id="part-5-pair-two-boards">Part 5. Pair two boards</h2>
+<p><strong>What you need:</strong> both boards flashed and on the
+<strong>same</strong> Wi-Fi network.</p>
+<p>There is no pairing step. Each board sends a small UDP packet to the
+whole network on port <code>47801</code>, and any Desk Buddies board on
+the same network receives it.</p>
+<p><strong>Steps</strong></p>
+<ol type="1">
+<li>Power both boards on the same Wi-Fi.</li>
+<li>On board A, tap the heart at the bottom left of the idle
+screen.</li>
+<li>Look at board B: a big heart appears for about four seconds, with a
+meow.</li>
+<li>On board A, check the top-left toast. It changes from
+<code>POKE!</code> to <code>SENT</code> when board B confirmed.</li>
+<li><strong>Send a message.</strong> Press and hold the heart for about
+0.8 seconds. A phrase panel opens. Tap a phrase. Board B shows the
+phrase with three reply buttons.</li>
+<li><strong>High-five.</strong> Tap the heart on both boards within 10
+seconds of each other. Both screens show "high-five".</li>
+<li><strong>Visit.</strong> In the phrase panel, use the "go" row to
+send your character over to the other board.</li>
+</ol>
+<p><strong>You should see:</strong> <code>SENT</code> on the sender, a
+heart on the receiver.</p>
+<p><strong>Troubleshooting</strong></p>
+<ul>
+<li><code>NO PEER</code> means no board answered within 1.5 seconds.
+Check that both boards are on the same Wi-Fi.</li>
+<li>Guest Wi-Fi and some mesh networks block devices from seeing each
+other (called client isolation). Turn that off, or use the main
+network.</li>
+<li>Both boards need firmware of the same generation. Flash both boards
+at the same time.</li>
+</ul>
+<p><strong>Test without touching the screen</strong> (replace
+<code>&lt;BOARD_IP&gt;</code> with your board's address, see Part 6 for
+how to find it):</p>
+<pre class="bash"><code>curl -d &#39;{&quot;poke&quot;:2}&#39;    http://&lt;BOARD_IP&gt;/usage    # send a poke through the real path
+curl -d &#39;{&quot;poke_rx&quot;:3}&#39; http://&lt;BOARD_IP&gt;/usage    # show a received poke locally</code></pre>
+<hr />
+<h2 id="part-6-connect-your-ai-coding-assistant">Part 6. Connect your AI
+coding assistant</h2>
+<p><strong>What you need:</strong> a computer on the same Wi-Fi as the
+board, Python 3, this repo downloaded, and Claude Code and/or Codex
+installed.</p>
+<p>The scripts in <code>host/</code> find the board, install hooks (so
+your assistant reports its state), and push the state to the board's
+<code>/usage</code> address. Every hook runs in the background and
+cannot slow down your assistant.</p>
+<p><strong>Steps</strong></p>
+<ol type="1">
+<li><p>Open a terminal in the repo folder.</p></li>
+<li><p><strong>One-line setup.</strong> This finds the board, installs
+hooks for Claude Code, and installs hooks for Codex if Codex is
+present:</p>
+<pre class="bash"><code>python3 host/setup.py</code></pre>
+<p>It backs up your existing settings first, only adds entries, and
+gives the same result when run again.</p></li>
+<li><p>Or do it step by step:</p>
+<pre class="bash"><code>python3 host/find_board.py        # finds the board on your Wi-Fi, writes host/board.json
+python3 host/install_claude.py    # Claude Code hooks + statusline tee in ~/.claude/settings.json
+python3 host/install_hooks.py     # Codex hooks in ~/.codex/hooks.json</code></pre></li>
+<li><p>Useful options (all exist in the scripts):</p>
+<pre class="bash"><code>python3 host/setup.py --dry-run                      # show what would change, write nothing
+python3 host/setup.py --config-dir ~/.claude-work    # another Claude Code config folder (repeatable)
+python3 host/setup.py --skip-board                   # skip the board search
+python3 host/install_claude.py --remove              # take the hooks out again
+python3 host/install_hooks.py --remove</code></pre></li>
+<li><p><strong>If the board is not found automatically</strong>, you can
+tell the scripts its address yourself. <code>find_board.py</code> looks
+for the board by its MAC address (a unique hardware address, printed on
+your router's device list). Set it, then run again:</p>
+<pre class="bash"><code>export CLAUDEBOT_BOARD_MAC=&lt;your board&#39;s MAC address&gt;
+python3 host/find_board.py --probe</code></pre>
+<p>Or skip the search and point the scripts at the board directly:</p>
+<pre class="bash"><code>export CLAUDEBOT_BOARD_URL=http://&lt;BOARD_IP&gt;/usage</code></pre>
+<p><code>host/board.json</code> holds the saved address (and optional
+<code>lat</code> / <code>lon</code> for weather).</p></li>
+<li><p>Restart Claude Code (or Codex), and send it a prompt.</p></li>
+</ol>
+<p><strong>You should see:</strong> the character on the board reacts.
+While the assistant works, the board shows a working animation with the
+tool name. When the assistant waits for your approval, the screen border
+pulses. After an error it shows an error face for 5 seconds. When a turn
+finishes it shows a "done" face for 8 seconds, then returns to idle.</p>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Meaning on the board</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>working</code></td>
+<td>A tool is running</td>
+</tr>
+<tr>
+<td><code>thinking</code></td>
+<td>The assistant is reading your prompt</td>
+</tr>
+<tr>
+<td><code>permission</code></td>
+<td>Waiting for you (stays until you answer, 15 minute cap)</td>
+</tr>
+<tr>
+<td><code>error</code></td>
+<td>A tool failed (back to working after 5 s)</td>
+</tr>
+<tr>
+<td><code>juggling</code></td>
+<td>A sub-agent is running</td>
+</tr>
+<tr>
+<td><code>done</code></td>
+<td>Turn finished (back to idle after 8 s)</td>
+</tr>
+<tr>
+<td><code>sleeping</code></td>
+<td>The board sleeps after 10 idle minutes</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Notes</strong></p>
+<ul>
+<li><p>The hooks use these events: SessionStart, SessionEnd,
+UserPromptSubmit, PreToolUse, PostToolUse, PostToolUseFailure,
+PermissionRequest, Notification, SubagentStart, SubagentStop and Stop.
+Each is registered as asynchronous with a 5 second timeout.</p></li>
+<li><p>Codex has no <code>PostToolUseFailure</code> or
+<code>Notification</code> event, so <code>claude_state.py</code> reads
+the Codex session log to detect errors.</p></li>
+<li><p><strong>Check the hook without the assistant:</strong> send a
+state by hand.</p>
+<pre class="bash"><code>curl -m 8 -X POST http://&lt;BOARD_IP&gt;/usage -d &#39;{&quot;state&quot;:&quot;working&quot;,&quot;ctx&quot;:&quot;test&quot;}&#39;</code></pre></li>
+<li><p>The host scripts that search your network
+(<code>find_board.py</code>) use macOS command-line tools
+(<code>arp</code>, <code>route</code>, <code>ifconfig</code>). On Linux,
+write the board address into <code>host/board.json</code> yourself, as
+<code>{"url": "http://&lt;BOARD_IP&gt;/usage"}</code>. I tested the host
+side on macOS only.</p></li>
+<li><p>Run the included tests with
+<code>cd host &amp;&amp; python3 -m unittest discover -p "test_*.py"</code>.</p></li>
+</ul>
+<p><strong>Troubleshooting</strong></p>
+<ul>
+<li>The board shows only the idle screen. The hooks run but cannot reach
+the board. Look at the logs:
+<code>tail /tmp/claudebot-state.log /tmp/claudebot-push.log</code>.
+<code>No route to host</code> usually means the address is wrong or your
+computer has not resolved the board yet. Ping the board a few times,
+then run <code>python3 host/find_board.py --rescan</code>.</li>
+<li>On macOS, a Python installed from python.org may be blocked from the
+local network. The installers choose a Python that can reach the board
+and write its full path into the hooks. To choose one yourself, add
+<code>--python &lt;path&gt;</code> to the installer, or set
+<code>CLAUDEBOT_HOOK_PYTHON</code>.</li>
+<li>If you moved to another Wi-Fi, the board joins the saved network by
+itself. Run <code>python3 host/find_board.py</code> to refresh the
+address.</li>
+</ul>
+<hr />
+<h2 id="part-7-usage-limit-and-weather-display">Part 7. Usage limit and
+weather display</h2>
+<p><strong>What you need:</strong> Part 6 done.</p>
+<p><strong>Usage limit.</strong> The top corners of the idle screen show
+how much of your 5-hour and weekly limit is left, with the time until
+reset. For Claude Code, the limits come from the statusline data.
+<code>install_claude.py</code> adds a small <code>tee</code> command in
+front of your existing statusline command, which saves a copy of the
+data to a file in <code>/tmp</code>. Your own statusline keeps working.
+For Codex, <code>host/codex_usage.py</code> reads the limits from the
+Codex session logs in <code>~/.codex/sessions</code>, and no statusline
+is needed.</p>
+<p>A <code>~</code> after a label (for example <code>5h~</code>) means
+the number is the last one received and is more than 15 minutes old.</p>
+<p>The cost columns (dollars and tokens used) need a usage-counting
+module that is not part of this repo, so Claude Code cost figures are
+not available from this repo alone. Codex shows token counts. See
+<code>host/push_usage.py</code> if you want to wire in your own
+counter.</p>
+<p><strong>Weather.</strong> The board fetches weather from <a
+href="https://open-meteo.com/">Open-Meteo</a> by itself every 30
+minutes, and your character changes outfit and weather particles (rain,
+snow, and more). You can also push weather from your computer on a
+schedule:</p>
+<ol type="1">
+<li><p>Test without a board:</p>
+<pre class="bash"><code>python3 host/push_weather.py --dry-run</code></pre></li>
+<li><p>Set your location by adding <code>lat</code> and <code>lon</code>
+to <code>host/board.json</code>, for example
+<code>{"lat": 37.5, "lon": 127.0}</code>. Without it the default is
+Seoul.</p></li>
+<li><p>On macOS, install the scheduled job. First open
+<code>host/com.claudebot.weather.plist</code> and replace
+<code>/ABSOLUTE/PATH/TO/desk-buddies/host/push_weather.py</code> with
+the real path on your computer. Then:</p>
+<pre class="bash"><code>cp host/com.claudebot.weather.plist ~/Library/LaunchAgents/
+launchctl load ~/Library/LaunchAgents/com.claudebot.weather.plist</code></pre>
+<p>The job runs once at load and then every 30 minutes
+(<code>StartInterval</code> 1800). Its log is
+<code>/tmp/claudebot-weather.log</code>.</p></li>
+<li><p>You can also set the board's weather location directly (replace
+the numbers with yours):</p>
+<pre class="bash"><code>curl -d &#39;{&quot;geo&quot;:{&quot;lat&quot;:37.5,&quot;lon&quot;:127.0}}&#39; http://&lt;BOARD_IP&gt;/usage</code></pre></li>
+</ol>
+<p><strong>You should see:</strong> a weather icon and temperature on
+the top bar, and rain or snow particles when the weather is wet.</p>
+<p><strong>Tip.</strong> To try a look without waiting for real weather,
+send it by hand:</p>
+<pre class="bash"><code>curl -d &#39;{&quot;weather&quot;:{&quot;kind&quot;:&quot;rain&quot;,&quot;temp&quot;:18,&quot;night&quot;:false}}&#39; http://&lt;BOARD_IP&gt;/usage</code></pre>
+<p><code>kind</code> can be <code>rain</code>, <code>snow</code>,
+<code>clear</code>, <code>cloud</code> or <code>partly</code>.</p>
+<hr />
+<h2 id="part-8-optional-baby-diary-ultrasound-health-birth-prep">Part 8.
+Optional: baby diary, ultrasound, health, birth prep</h2>
+<p><strong>What you need:</strong> a web server you control that can
+answer HTTPS requests with JSON. The server I use is my own app and is
+not part of this repo, so this part describes only what the board
+expects, so you can build or adapt your own.</p>
+<p><strong>What the board does.</strong> About every 10 minutes it sends
+an HTTPS GET to your server's <code>/api/board</code> address with an
+<code>Authorization: Bearer &lt;token&gt;</code> header. When you open
+one of the menu items, it fetches
+<code>/api/board?part=ultrasound</code>, <code>?part=health</code> or
+<code>?part=prep</code> (skipping a part it fetched within the last 5
+minutes). Photos are fetched as small JPEG thumbnails from addresses
+that your server signs.</p>
+<p><strong>Rules for your server</strong></p>
+<ul>
+<li>Use <code>https</code> only. The board will not take a plain
+<code>http</code> address.</li>
+<li>The response to <code>?part=&lt;name&gt;</code> must include
+<code>"part": "&lt;name&gt;"</code> with the same name. If it does not
+match, the board treats the request as failed. (An old server that
+ignores <code>part</code> and returns the diary list is rejected this
+way.)</li>
+<li>Remove emoji from text. The board font covers ASCII plus the Korean
+KS X 1001 character set.</li>
+<li>Keep each part to about 6 KB.</li>
+</ul>
+<p><strong>Tell each board where the server is.</strong> Do this once
+per board, using the board's token and who is writing (<code>mom</code>
+or <code>dad</code>, so a board alerts only for the other person's
+entries):</p>
+<pre class="bash"><code>curl -s -X POST http://&lt;BOARD_IP&gt;/usage -H &#39;Content-Type: application/json&#39; \
+  -d &#39;{&quot;diary&quot;:{&quot;token&quot;:&quot;&lt;YOUR_TOKEN&gt;&quot;,&quot;me&quot;:&quot;mom&quot;}}&#39;</code></pre>
+<p>Use <code>"me":"dad"</code> for the other board. The server address
+is stored on the board; see the firmware docs for the setting once the
+firmware is released. The board only shows the diary menu after it has a
+token.</p>
+<p><strong>JSON shapes</strong></p>
+<p>Ultrasound, <code>GET /api/board?part=ultrasound</code>:</p>
+<pre class="json"><code>{
+  &quot;part&quot;: &quot;ultrasound&quot;,
+  &quot;visits&quot;: 4,
+  &quot;photos&quot;: 15,
+  &quot;items&quot;: [
+    {&quot;id&quot;: &quot;v4&quot;, &quot;date&quot;: &quot;2026-11-16&quot;, &quot;week&quot;: [25, 4],
+     &quot;photos&quot;: [&quot;&lt;signed-photo-url&gt;&quot;, &quot;&lt;signed-photo-url&gt;&quot;]}
+  ]
+}</code></pre>
+<p><code>week</code> is <code>[weeks, days]</code>. Each visit has up to
+4 photo addresses.</p>
+<p>Mom's health, <code>GET /api/board?part=health</code>:</p>
+<pre class="json"><code>{
+  &quot;part&quot;: &quot;health&quot;,
+  &quot;date&quot;: &quot;2026-11-16&quot;,
+  &quot;today&quot;: {&quot;kcal&quot;: 1294, &quot;caffeine_mg&quot;: 40, &quot;count&quot;: 3},
+  &quot;limits&quot;: {&quot;caffeine_mg&quot;: 200},
+  &quot;weight&quot;: {&quot;kg&quot;: 58.2, &quot;date&quot;: &quot;2026-11-15&quot;, &quot;goal_max_kg&quot;: 63},
+  &quot;meals&quot;: [
+    {&quot;meal&quot;: &quot;breakfast&quot;, &quot;items&quot;: [{&quot;name&quot;: &quot;toast&quot;, &quot;risk&quot;: null}]}
+  ],
+  &quot;exercise&quot;: {&quot;week_count&quot;: 3, &quot;last&quot;: {&quot;date&quot;: &quot;2026-11-14&quot;, &quot;name&quot;: &quot;walk&quot;}}
+}</code></pre>
+<p><code>weight</code> can be <code>null</code>.
+<code>exercise.last</code> can be <code>null</code>. An item with a
+<code>risk</code> value is drawn in yellow with a <code>!</code>. The
+fields in <code>today</code> beyond <code>kcal</code> and
+<code>caffeine_mg</code> are my own server's; see the firmware source
+once released for the exact set it reads.</p>
+<p>Birth prep, <code>GET /api/board?part=prep</code>:</p>
+<pre class="json"><code>{
+  &quot;part&quot;: &quot;prep&quot;,
+  &quot;birth&quot;: &quot;2027-02-10&quot;,
+  &quot;dday&quot;: 86,
+  &quot;open&quot;: 7,
+  &quot;items&quot;: [
+    {&quot;due&quot;: &quot;2026-12-01&quot;, &quot;title&quot;: &quot;Pack hospital bag&quot;},
+    {&quot;due&quot;: null, &quot;title&quot;: &quot;Choose a pediatrician&quot;}
+  ]
+}</code></pre>
+<p>The board sorts items by nearest due date, and <code>due: null</code>
+shows a dash.</p>
+<p>Diary list, <code>GET /api/board</code> (no <code>part</code>): the
+latest 10 entries, each with its date, who wrote it (<code>mom</code> or
+<code>dad</code>), mood, text, and the first photo (<code>photo</code>),
+up to 10 photos (<code>photos</code>) and a count
+(<code>photo_count</code>). I did not document the exact field names
+here; see <code>docs/manbok-diary.md</code> in the full firmware
+release.</p>
+<p><strong>Test without a server</strong> by asking the board to open a
+panel:</p>
+<pre class="bash"><code>curl -d &#39;{&quot;manbok_menu&quot;:1}&#39;               http://&lt;BOARD_IP&gt;/usage   # open the 6-item menu
+curl -d &#39;{&quot;manbok_panel&quot;:&quot;ultrasound&quot;}&#39;   http://&lt;BOARD_IP&gt;/usage   # open a panel: ultrasound, health, prep, message, visit
+curl -d &#39;{&quot;manbok_fetch&quot;:1}&#39;              http://&lt;BOARD_IP&gt;/usage   # fetch the three parts again now</code></pre>
+<p><strong>You should see:</strong> the menu opens with six items.
+Ultrasound shows one row per visit with four thumbnails. Pressing the
+heart for about 0.8 seconds opens the menu on boards that have a
+token.</p>
+<p><strong>Tip.</strong> If a panel shows "could not fetch", test your
+server with <code>curl</code> and the same Bearer header and check that
+<code>part</code> is echoed back.</p>
+<hr />
+<h2 id="part-9-make-it-your-family-art-and-sounds">Part 9. Make it your
+family: art and sounds</h2>
+<p><strong>Characters.</strong> <code>art/</code> contains the cutouts I
+used: <code>rona/</code> and <code>rozzi/</code> (two cats), and
+<code>manbok/</code> (the baby). Each folder has sheets for faces (5),
+poses (8 for the cats, 8 for the baby) and turnarounds (6 views). They
+are all (c) the author and shown as an example of the format. Replace
+them with your own pets and people.</p>
+<p><img src="../art/rona/face_2_happy.png"
+alt="Rona the cat, happy face" /> <img
+src="../art/rona/turn_1_front.png" alt="Rona turnaround, front" /> <img
+src="../art/rozzi/pose_1_sit.png" alt="Rozzi the cat, sitting" /> <img
+src="../art/manbok/pose_3_lying.png" alt="Manbok the baby, lying" /></p>
+<p><strong>Steps for your own characters</strong></p>
+<ol type="1">
+<li><p>Draw or generate pixel-art animation frames for each state (idle,
+thinking, working, juggling, permission, error, done, sleeping). I made
+mine with a separate pixel-art tool that is not part of this
+repo.</p></li>
+<li><p>Put each character in a folder <code>packs/&lt;name&gt;/</code>
+with a <code>pack.json</code> that maps the board states to your
+animation states, and a <code>sets/&lt;set&gt;/manifest.json</code> for
+each set of frames. The format is documented at the top of
+<code>tools/gen_pack.py</code>. Pack names are 8 characters or
+fewer.</p></li>
+<li><p>Generate the C++ table the firmware compiles in. You can run it
+by hand to check your files first:</p>
+<pre class="bash"><code>python3 tools/gen_pack.py packs/&lt;name&gt; out.cc</code></pre>
+<p>The firmware build calls this script by itself. Using it needs the
+<code>firmware/</code> folder, which is <strong>(to be
+added)</strong>.</p></li>
+</ol>
+<p><strong>Sounds.</strong> The notification sounds are your pets'
+voices. <code>tools/import_notify_sounds.py</code> cuts six short clips
+from your recordings, converts them to 16 kHz mono, filters noise, sets
+the volume and writes six <code>.pcm</code> files that the firmware
+embeds. It needs <code>ffmpeg</code> on your PATH.</p>
+<ol type="1">
+<li><p>Put your recordings in a folder with these exact names:
+<code>rona.m4a</code>, <code>rozzi.m4a</code> (your own pets or any two
+voices), <code>baby_5mo.ogg</code>, <code>baby_14mo.ogg</code> (baby
+babble, see the credit links in Part 11).</p></li>
+<li><p>Open <code>tools/import_notify_sounds.py</code> and edit the
+<code>CLIPS</code> list: for each output name, change the start and end
+seconds to a clean sound in <strong>your</strong> recording.</p></li>
+<li><p>Run it. <code>--preview</code> writes WAV files you can listen
+to:</p>
+<pre class="bash"><code>python3 tools/import_notify_sounds.py --src ~/my-sounds --preview ~/my-sounds/preview</code></pre>
+<p>The output goes to <code>main/sounds/</code> next to the firmware.
+The audio files themselves are not in this repo.</p></li>
+<li><p>Listen to the previews, adjust the times, repeat, then rebuild
+and flash the firmware (Part 3).</p></li>
+</ol>
+<p><strong>Volume and quiet hours</strong> can be changed live without
+flashing. Defaults are volume 50 and quiet from 23:00 to 07:00:</p>
+<pre class="bash"><code>curl -d &#39;{&quot;sound&quot;:{&quot;vol&quot;:60,&quot;quiet_from&quot;:23,&quot;quiet_to&quot;:7}}&#39; http://&lt;BOARD_IP&gt;/usage
+curl -d &#39;{&quot;sound_test&quot;:&quot;poke&quot;}&#39; http://&lt;BOARD_IP&gt;/usage    # also: guest, rona, rozzi, manbok</code></pre>
+<p><code>vol</code> 0 mutes the board.</p>
+<p><strong>You should see:</strong> the clip names printed with their
+length, and the previews playing the sounds you chose.</p>
+<hr />
+<h2 id="part-10-check-the-screen-remotely-and-troubleshooting">Part 10.
+Check the screen remotely, and troubleshooting</h2>
+<p><strong>Screen capture.</strong> The board can send its screen over
+the network. <code>tools/screen.py</code> turns it into a PNG. It needs
+Pillow (<code>pip install pillow</code>).</p>
+<pre class="bash"><code>export CLAUDEBOT_URL=http://&lt;BOARD_IP&gt;/usage
+python3 tools/screen.py out.png</code></pre>
+<p>Or set <code>SCREEN_URL=http://&lt;BOARD_IP&gt;/screen</code>
+instead. You can also convert a raw dump you saved earlier:
+<code>python3 tools/screen.py out.png raw.bin</code>.</p>
+<p><strong>You should see:</strong> <code>wrote out.png</code>, and a
+640 x 480 picture of what the board shows now.</p>
+<p><strong>Troubleshooting table</strong></p>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Likely cause</th>
+<th>What to try</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Board shows only idle, never reacts to the assistant</td>
+<td>Computer cannot reach the board</td>
+<td>Read <code>/tmp/claudebot-state.log</code> and
+<code>/tmp/claudebot-push.log</code>. Ping the board, then
+<code>python3 host/find_board.py --rescan</code></td>
+</tr>
+<tr>
+<td><code>No route to host</code> in the log</td>
+<td>Address changed, or macOS has not resolved the board yet</td>
+<td>Ping the board a few times, run <code>find_board.py</code>, set a
+fixed IP in the router</td>
+</tr>
+<tr>
+<td><code>find_board.py</code> cannot find the board</td>
+<td>MAC address unknown</td>
+<td>Set <code>CLAUDEBOT_BOARD_MAC</code>, or run with
+<code>--probe</code>, or write the address in
+<code>host/board.json</code></td>
+</tr>
+<tr>
+<td>Board stuck on the setup guide</td>
+<td>No saved Wi-Fi, or wrong password</td>
+<td>Join the <code>Xiaozhi-</code> hotspot, open
+<code>http://192.168.4.1</code>, save the Wi-Fi again</td>
+</tr>
+<tr>
+<td>Poke shows <code>NO PEER</code></td>
+<td>Boards on different networks, or client isolation</td>
+<td>Put both on the same main Wi-Fi, turn off guest isolation</td>
+</tr>
+<tr>
+<td>Screen stays black after flashing</td>
+<td>Board stuck in download mode</td>
+<td>Unplug and replug USB. Do not press reset repeatedly</td>
+</tr>
+<tr>
+<td>Flash stops with "No more data to read"</td>
+<td>USB glitch</td>
+<td>Run the same flash command again, at <code>-b 115200</code></td>
+</tr>
+<tr>
+<td>Serial log empty or garbled</td>
+<td>The port reset the board</td>
+<td>Wait three seconds, close and reopen the port</td>
+</tr>
+<tr>
+<td>Screen shows <code>approve?</code> for a long time</td>
+<td>A session waits for permission</td>
+<td>Answer it in the assistant. Permission state is capped at 15
+minutes</td>
+</tr>
+<tr>
+<td>Weather does not change</td>
+<td>Job not loaded or wrong path in the plist</td>
+<td>Check <code>/tmp/claudebot-weather.log</code>, fix the path in the
+plist and load it again</td>
+</tr>
+<tr>
+<td>Menu panel says it could not fetch</td>
+<td>Server not reachable or <code>part</code> not echoed</td>
+<td>Test the server with <code>curl</code> and the Bearer header</td>
+</tr>
+<tr>
+<td>Invalid value</td>
+<td>The board returns HTTP 400 for out-of-range values</td>
+<td>Check the field in the table of the README</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Board HTTP API at a glance.</strong> The main endpoint is
+<code>POST /usage</code> with a JSON body, and every field is optional.
+The README has a field table. <code>GET /screen</code> returns the
+current screen.</p>
+<hr />
+<h2 id="part-11-credits-and-licenses">Part 11. Credits and licenses</h2>
+<ul>
+<li><strong>Firmware base:</strong> <a
+href="https://github.com/78/xiaozhi-esp32">xiaozhi-esp32</a> by 78, MIT
+license.</li>
+<li><strong>Pixel font:</strong> <a
+href="https://github.com/quiple/galmuri">Galmuri</a> (Galmuri11 /
+Galmuri14), SIL Open Font License 1.1. Used to pre-render Korean text
+for the board. Font files are not included.</li>
+<li><strong>Weather data:</strong> <a
+href="https://open-meteo.com/">Open-Meteo</a>.</li>
+<li><strong>Baby sounds:</strong> Wikimedia Commons, public domain.
+<ul>
+<li><a
+href="https://commons.wikimedia.org/wiki/File:Baby_5_months_old_gabbling_laughing_practising_voice.ogg">Baby
+5 months old gabbling laughing practising voice</a></li>
+<li><a
+href="https://commons.wikimedia.org/wiki/File:Even_tempered_baby_14_months_communicative.ogg">Even
+tempered baby 14 months communicative</a></li>
+</ul></li>
+<li><strong>Cat sounds:</strong> the author's own recordings of two pet
+cats (not included).</li>
+<li><strong>Code</strong> (<code>host/</code>, <code>tools/</code>):
+MIT, see <code>LICENSE</code>.</li>
+<li><strong>Character art and photos</strong> (<code>art/</code>,
+<code>case/*.jpg</code>, <code>case/*.png</code>): (c) the author, all
+rights reserved. They are not covered by the MIT license.</li>
+</ul>
+<p>Project repository: <a
+href="https://github.com/wineny/desk-buddies">https://github.com/wineny/desk-buddies</a></p>
+</body></html>

@@ -50,6 +50,8 @@ I built two orange, cat-eared pixel screens, one for my desk and one for my husb
 
 Cat-ear case modeled in SolidCraft and printed in orange PLA. Dimensions, photos and the CAD render are in [case/README.md](case/README.md). STL files: coming soon.
 
+**Build guide:** step-by-step instructions in [docs/BUILD_GUIDE.md](docs/BUILD_GUIDE.md) ([PDF](docs/BUILD_GUIDE.pdf)).
+
 ## Host setup (hooks)
 
 Requires Python 3 on the same Wi-Fi network as the board.
