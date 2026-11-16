@@ -1,0 +1,10 @@
+.DS_Store
+__pycache__/
+*.pyc
+.env
+.env.*
+host/board.json
+*.log
+.venv/
+sdkconfig
+sdkconfig.old
